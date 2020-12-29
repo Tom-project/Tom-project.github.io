@@ -1,2 +1,4 @@
 theme: jekyll-theme-minimal
 title: hello
+logo: 
+show_downloads: true
