@@ -1,2 +1,13 @@
 
 theme: jekyll-theme-minimal
+title: Home
+
+plugins:
+  - jekyll-relative-links
+
+relative_links:
+  enabled: true
+  collections: true
+
+include:
+  - README.md

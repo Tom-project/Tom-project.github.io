@@ -1,0 +1,166 @@
+---
+tags: [Nettitude]
+title: Printyg00d
+created: '2020-10-27T15:56:18.973Z'
+modified: '2020-11-10T17:34:25.346Z'
+---
+
+# Printyg00d
+
+```bash
+# Nmap 7.80 scan initiated Tue Oct 27 15:40:47 2020 as: nmap -Pn -sV -sS -A -p- -oN nmap.txt 192.168.0.26
+Nmap scan report for 192.168.0.26
+Host is up (0.00070s latency).
+Not shown: 65529 closed ports
+PORT      STATE SERVICE    VERSION
+21/tcp    open  ftp        vsftpd 3.0.3
+| ftp-anon: Anonymous FTP login allowed (FTP code 230)
+|_drwxrwxrwx    3 755      0              20 Jul 05 11:30 pub [NSE: writeable]
+| ftp-syst: 
+|   STAT: 
+| FTP server status:
+|      Connected to 192.168.0.19
+|      Logged in as ftp
+|      TYPE: ASCII
+|      No session bandwidth limit
+|      Session timeout in seconds is 300
+|      Control connection is plain text
+|      Data connections will be plain text
+|      At session startup, client count was 2
+|      vsFTPd 3.0.3 - secure, fast, stable
+|_End of status
+22/tcp    open  ssh        OpenSSH 8.0 (protocol 2.0)
+| ssh-hostkey: 
+|   3072 e1:ed:da:8d:6c:36:73:91:f1:7a:68:dc:69:ee:5e:54 (RSA)
+|   256 b2:7c:e4:5c:1e:91:d5:89:5e:2f:28:79:fd:79:3b:42 (ECDSA)
+|_  256 61:13:e6:44:c7:57:e7:17:87:42:d2:57:71:c2:6a:c9 (ED25519)
+80/tcp    open  http       Apache httpd 2.4.37 ((centos))
+| http-methods: 
+|_  Potentially risky methods: TRACE
+|_http-server-header: Apache/2.4.37 (centos)
+|_http-title: 403 Forbidden
+3306/tcp  open  mysql?
+| fingerprint-strings: 
+|   DNSStatusRequestTCP: 
+|     8.0.17
+|     qw<y
+|     ^7rU=&
+|     mysql_native_password
+|     packets out of order
+|   DNSVersionBindReqTCP: 
+|     8.0.17
+|     Lx>PP
+|     rQI4, oC
+|     mysql_native_password
+|     #08S01Got packets out of order
+|   GenericLines, NULL: 
+|     8.0.17
+|     /_W4
+|     (%<{&Zo
+|     mysql_native_password
+|   GetRequest: 
+|     8.0.17
+|     -DGd
+|     OJ'"
+|     mysql_native_password
+|     packets out of order
+|   HTTPOptions: 
+|     8.0.17
+|     C:8} E
+|     mysql_native_password
+|     packets out of order
+|   Help: 
+|     8.0.17
+|     mysql_native_password
+|     packets out of order
+|   RPCCheck: 
+|     8.0.17
+|     #xg^
+|     mysql_native_password
+|     packets out of order
+|   RTSPRequest: 
+|     8.0.17
+|     F]@(
+|     `}3]
+|     mysql_native_password
+|     packets out of order
+|   SSLSessionReq: 
+|     8.0.17
+|     Vr^^
+|     sJfML
+|     \x1a;"
+|     mysql_native_password
+|_    #08S01Got packets out of order
+| mysql-info: 
+|   Protocol: 10
+|   Version: 8.0.17
+|   Thread ID: 67
+|   Capabilities flags: 65535
+|   Some Capabilities: SupportsTransactions, DontAllowDatabaseTableColumn, LongPassword, Speaks41ProtocolOld, SwitchToSSLAfterHandshake, LongColumnFlag, Support41Auth, Speaks41ProtocolNew, ODBCClient, SupportsCompression, IgnoreSigpipes, SupportsLoadDataLocal, InteractiveClient, IgnoreSpaceBeforeParenthesis, FoundRows, ConnectWithDatabase, SupportsAuthPlugins, SupportsMultipleResults, SupportsMultipleStatments
+|   Status: Autocommit
+|   Salt:  \x1A*V<;bRe
+| 8F\x1E\x12x\x05+lrv
+|_  Auth Plugin Name: mysql_native_password
+8443/tcp  open  https-alt?
+| fingerprint-strings: 
+|   DNSStatusRequestTCP, LANDesk-RC, LDAPBindReq, NULL, TerminalServer, X11Probe: 
+|     Server Manager v1.3.3.7
+|     Username:
+|   DNSVersionBindReqTCP, Help, LPDString, NCP, NotesRPC, RPCCheck: 
+|     Server Manager v1.3.3.7
+|     Username:Password:
+|   FourOhFourRequest, GenericLines, GetRequest, HTTPOptions, Kerberos, LDAPSearchReq, RTSPRequest, SIPOptions, SMBProgNeg, SSLSessionReq, SSLv23SessionReq, TLSSessionReq, TerminalServerCookie: 
+|     Server Manager v1.3.3.7
+|_    Username:Password:Incorrect login
+33060/tcp open  mysqlx?
+3 services unrecognized despite returning data. If you know the service/version, please submit the following fingerprints at https://nmap.org/cgi-bin/submit.cgi?new-service :
+```
+
+## Recon
+- ftp Anonymous login
+```bash
+root@kali:~/Documents/nettitude/printyg00d# ftp 192.168.0.26
+Connected to 192.168.0.26.
+220 (vsFTPd 3.0.3)
+Name (192.168.0.26:root): anonymous
+331 Please specify the password.
+Password:
+230 Login successful.
+Remote system type is UNIX.
+Using binary mode to transfer files.
+ftp> dir
+200 PORT command successful. Consider using PASV.
+150 Here comes the directory listing.
+drwxrwxrwx    3 755      0              20 Jul 05 11:30 pub
+226 Directory send OK.
+ftp> cd pub
+250 Directory successfully changed.
+ftp> dir
+200 PORT command successful. Consider using PASV.
+150 Here comes the directory listing.
+drwxr-xr-x    2 0        0              20 Jul 05 10:43 backup
+226 Directory send OK.
+ftp> cd backup 
+250 Directory successfully changed.
+ftp> dir
+200 PORT command successful. Consider using PASV.
+150 Here comes the directory listing.
+-rw-r--r--    1 0        0              40 Jul 05 10:43 readme
+226 Directory send OK.
+ftp> get readme
+local: readme remote: readme
+200 PORT command successful. Consider using PASV.
+150 Opening BINARY mode data connection for readme (40 bytes).
+226 Transfer complete.
+40 bytes received in 0.00 secs (34.9709 kB/s)
+ftp> 
+
+```
+
+```
+root@kali:~/Documents/nettitude/printyg00d# cat readme 
+polity-residua-mad-amends-pipette-bonny
+
+```
+
+
