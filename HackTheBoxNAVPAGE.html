@@ -1,0 +1,198 @@
+<!DOCTYPE HTML>
+
+<html>
+
+
+
+	<head>
+		<title>Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css"/>
+        <link rel="stylesheet" href="/assets/css/atom-one-dark.css">
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+
+	<div class="sidebar">
+		<ul class="sidebar-list">
+          <li class="sidebar-item"><a href="/" class="sidebar-anchor">Home</a></li>
+		  <li class="sidebar-item"><a href="#" class="sidebar-anchor">Hack The Box</a></li>
+		  <li class="sidebar-item"><a href="/Vulnhub.html" class="sidebar-anchor">Vuln Hub</a></li>
+		  <li class="sidebar-item"><a href="#" class="sidebar-anchor">Write-ups</a></li>
+		</ul>
+	  </div>
+
+<main>
+    
+	<body class="is-preload">
+		<!-- Header -->
+			<section id="header">
+				<header>
+					<h1>Hack The Box</h1>
+
+
+			<!--SIDE NAV BAR-->
+			<div class="nav-right visible-xs">
+				<div class="button2" id="btn">
+				  <div class="bar top"></div>
+				  <div class="bar middle"></div>
+				  <div class="bar bottom"></div>
+				</div>
+			  </div>
+			  
+			 
+			  <!-- nav-right -->
+			  
+				<nav>
+				  <div class="nav-right hidden-xs">
+					<div class="button2" id="btn">
+					  <div class="bar top"></div>
+					  <div class="bar middle"></div>
+					  <div class="bar bottom"></div>
+					</div>
+				  </div>
+				  <!-- nav-right -->
+				</nav>
+			  
+				</header>
+			</section>
+	
+            <!--Seperator
+            <img src="images/fulls/Gradient Wave (2).png"></img>
+            -->
+        
+
+			<!--Search Box-->
+            <form1 id="test">
+				<input type="text" name="input" class="input1" id="search-input">
+				<button1 type="reset" class="search1" id="search-btn"></button1>
+			</form1>
+
+    <!-- Feature 1 -->
+    <article id="first" class="container box style1 left">
+        <a href="/HackTheBox/academy.html" class="image1 fit"><img src="images\fulls\Academy.PNG" alt="" /></a>
+        <div class="inner">
+            <header>
+                <h2>Academy<br />
+                </h2>
+            </header>
+            <p>Academy was a simple box that stressed the need for good grepping skills. It involved a 
+                vulnerable php web manager "Lavarel". Finding creds for two different accounts and 
+                then exploit a vulnerable binary to get root.
+            </p>
+        </div>
+    </article>
+		
+
+
+    <!-- Feature 2 -->
+        <article class="container box style1 left box-arrow">
+            <a href="/HackTheBox/doctor.html" class="image1 fit"><img src="images\fulls\Doctor.png" alt="" /></a>
+            <div class="inner">
+                <header>
+                    <h2>Doctor<br />
+                    </h2>
+                </header>
+                <p>This was a nice and simple box with a few rabbit holes. It involved a template injection 
+                    vulnerability, leading to a foothold on the network, and then an authenticated RCE for privilege
+                    escalation via the splunk management port on 8089. 
+                </p>
+            </div>
+        </article>
+
+        <!-- Feature 1 -->
+        <article id="first" class="container box style1 left box-arrow">
+            <a href="/HackTheBox/omni.html" class="image1 fit"><img src="images\fulls\Omni.png" alt="" /></a>
+            <div class="inner">
+                <header>
+                    <h2>Omni<br />
+                    </h2>
+                </header>
+                <p>Omni was an IOT box, involving an RCE on a Windows IOT core device and an interesting 
+                    powershell technique to view secure string passwords allowing us to get administrator 
+                    privileges and reading the root flag.
+                </p>
+            </div>
+        </article>
+
+
+         <!-- Feature 2 -->
+         <article class="container box style1 left box-arrow">
+            <a href="/HackTheBox/traceback.html" class="image1 fit"><img src="images\fulls\traceback.png" alt="" /></a>
+            <div class="inner">
+                <header>
+                    <h2>Traceback<br />
+                    </h2>
+                </header>
+                <p>Traceback was a linux machine which involved a website that had already been owned with a 
+                    backdoor on the webserver, with a two step process to root, involving a luvit binary exploit 
+                    and injecting malicious code into the ssh banner for root privilege escalation.
+                </p>
+            </div>
+        </article>
+
+         <!-- Feature 2 -->
+         <article class="container box style1 left box-arrow">
+            <a href="/HackTheBox/Buff.html" class="image1 fit"><img src="images\fulls\BUFF.png" alt="" /></a>
+            <div class="inner">
+                <header>
+                    <h2>Buff<br />
+                    </h2>
+                </header>
+                <p>Buff was running a vulnerable webserver, hosting "Gym management software 1.0", allowing for 
+                    unauthenticated RCE and a buffer overflow to root.
+                </p>
+            </div>
+        </article>
+
+        <!-- Feature 2 -->
+        <article class="container box style1 left box-arrow">
+            <a href="/HackTheBox/unbalanced.html" class="image1 fit"><img src="images\fulls\Unbalanced.png" alt="" /></a>
+            <div class="inner">
+                <header>
+                    <h2>Unbalenced<br />
+                    </h2>
+                </header>
+                <p>I literally only nmap'd this box? not sure why it has a write up or a page. Perhaps i will give it
+                    a go another day. Heard it's crazy hard though...
+                </p>
+            </div>
+        </article>
+
+
+
+		<section id="footer">
+			<ul class="icons">
+				<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+				<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+				<li><a href="#" class="icon brands fa-google-plus-g"><span class="label">Google+</span></a></li>
+				<li><a href="#" class="icon brands fa-pinterest"><span class="label">Pinterest</span></a></li>
+				<li><a href="#" class="icon brands fa-dribbble"><span class="label">Dribbble</span></a></li>
+				<li><a href="#" class="icon brands fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+			</ul>
+			<div class="copyright">
+				<ul class="menu">
+					<li>&copy; </a></li>
+				</ul>
+			</div>
+		</section>
+
+		<!-- Scripts -->
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/jquery.scrolly.min.js"></script>
+        <script src="assets/js/jquery.poptrox.min.js"></script>
+        <script src="assets/js/browser.min.js"></script>
+        <script src="assets/js/breakpoints.min.js"></script>
+        <script src="assets/js/util.js"></script>
+        <script src="assets/js/main.js"></script>
+        <script src="assets/js/button.js"></script>
+        <script src="assets/js/NavBar.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+        <script src="/assets/js/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+	</body>
+    <br />
+</main>
+</html>

