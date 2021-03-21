@@ -242,6 +242,7 @@ main {
 	color: #3a3939;
 	text-shadow: 0 0 0.5px rgba(58, 57, 57, 0.25);
 	-webkit-text-stroke: 0.25px;
+	overflow-x: hidden;
 }
 
 .sidebar {
@@ -2727,7 +2728,7 @@ nav {
 		}
 
 			#footer a:hover {
-				color: #35b88f;
+				color: #0ea7c2;
 				text-shadow: 0 0 0.5px rgba(69, 200, 159, 0.25);
 				border-bottom-color: rgba(53, 184, 143, 0.5);
 			}
