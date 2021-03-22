@@ -215,6 +215,13 @@ input, select, textarea {
     -ms-transform: translate(-100%, -50%);
     transform: translate(-100%, -50%);
   }
+
+  @media screen and (max-width: 736px) {
+	#test {
+		margin-left: 130px;
+		
+	  }
+}
   
 /*---------------------------------------------------------------------------*/  
 
@@ -481,6 +488,18 @@ nav {
   .visible-xs {
     display: none;
   }
+}
+
+@media screen and (max-width: 736px) {
+	.nav-right {
+		position: absolute;
+	  }
+	  .hidden-xs {
+		display: block;
+	  }
+	  .visible-xs {
+		display: none;
+	  }
 }
 
 
